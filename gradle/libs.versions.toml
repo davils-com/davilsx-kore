@@ -1,14 +1,20 @@
 [versions]
 kotlin = "2.3.20"
 kreate = "1.0.0"
+kotest = "6.1.11"
+ksp = "2.3.6"
 
 [libraries]
 # actual plugins, but needed as dependencies in buildSrc
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kreate-gradle-plugin = { module = "com.davils.kreate:com.davils.kreate.gradle.plugin", version.ref = "kreate" }
+kotest-gradle-plugin = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 [bundles]
 build-src = [
     "kotlin-gradle-plugin",
-    "kreate-gradle-plugin"
+    "kreate-gradle-plugin",
+    "kotest-gradle-plugin",
+    "ksp-gradle-plugin"
 ]
