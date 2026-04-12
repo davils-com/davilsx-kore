@@ -1,0 +1,14 @@
+[versions]
+kotlin = "2.3.20"
+kreate = "1.0.0"
+
+[libraries]
+# actual plugins, but needed as dependencies in buildSrc
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kreate-gradle-plugin = { module = "com.davils.kreate:com.davils.kreate.gradle.plugin", version.ref = "kreate" }
+
+[bundles]
+build-src = [
+    "kotlin-gradle-plugin",
+    "kreate-gradle-plugin"
+]
