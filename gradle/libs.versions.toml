@@ -5,6 +5,11 @@ kotest = "6.1.11"
 ksp = "2.3.6"
 
 [libraries]
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+
 # actual plugins, but needed as dependencies in buildSrc
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kreate-gradle-plugin = { module = "com.davils.kreate:com.davils.kreate.gradle.plugin", version.ref = "kreate" }
@@ -12,6 +17,16 @@ kotest-gradle-plugin = { module = "io.kotest:io.kotest.gradle.plugin", version.r
 ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 [bundles]
+kore-tests-common-impl = [
+    "kotest-framework-engine",
+    "kotest-assertions-core",
+    "kotest-property"
+]
+
+kore-tests-jvm-impl = [
+    "kotest-runner-junit5"
+]
+
 build-src = [
     "kotlin-gradle-plugin",
     "kreate-gradle-plugin",
