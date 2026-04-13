@@ -1,3 +1,7 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     org.jetbrains.kotlin.multiplatform
     com.google.devtools.ksp
@@ -47,7 +51,29 @@ kreate {
 kotlin {
     jvm()
 
+    wasmJs {
+        browser()
+    }
+
     js(IR) {
         browser()
     }
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    mingwX64()
+    macosArm64()
+
+    linuxX64()
+    linuxArm64()
+
+    tvosArm64()
+    tvosSimulatorArm64()
+
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
 }
