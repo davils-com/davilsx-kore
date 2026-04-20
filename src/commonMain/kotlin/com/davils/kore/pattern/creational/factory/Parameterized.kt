@@ -154,14 +154,50 @@ public fun interface FactoryParameterizedAsync<P : FactoryParameter, out R> {
     }
 }
 
+/**
+ * Transforms the output of this [FactoryParameterized] using the provided [transform] function.
+ *
+ * Creates a new parameterized factory that applies the transformation to each instance produced by the original factory.
+ *
+ * @param P The type of the parameter required to create the object.
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A function to transform the created instance.
+ * @return A new [FactoryParameterized] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <P : FactoryParameter, R, T> FactoryParameterized<P, R>.map(
     transform: (R) -> T
 ): FactoryParameterized<P, T> = FactoryParameterized { transform(create(it)) }
 
+/**
+ * Transforms the output of this [FactoryParameterizedAsync] using the provided [transform] function.
+ *
+ * Creates a new asynchronous parameterized factory that applies the transformation to each instance produced by the original factory.
+ *
+ * @param P The type of the parameter required to create the object.
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A function to transform the created instance.
+ * @return A new [FactoryParameterizedAsync] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <P : FactoryParameter, R, T> FactoryParameterizedAsync<P, R>.map(
     transform: (R) -> T
 ): FactoryParameterizedAsync<P, T> = FactoryParameterizedAsync { transform(create(it)) }
 
+/**
+ * Transforms the output of this [FactoryParameterizedAsync] using the provided asynchronous [transform] function.
+ *
+ * Creates a new asynchronous parameterized factory that applies the asynchronous transformation to each instance produced by the original factory.
+ *
+ * @param P The type of the parameter required to create the object.
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A suspend function to transform the created instance.
+ * @return A new [FactoryParameterizedAsync] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <P : FactoryParameter, R, T> FactoryParameterizedAsync<P, R>.mapAsync(
     transform: suspend (R) -> T
 ): FactoryParameterizedAsync<P, T> = FactoryParameterizedAsync { transform(create(it)) }

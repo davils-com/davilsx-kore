@@ -134,12 +134,45 @@ public fun interface FactoryAsync<out R> {
     }
 }
 
+/**
+ * Transforms the output of this [Factory] using the provided [transform] function.
+ *
+ * Creates a new factory that applies the transformation to each instance produced by the original factory.
+ *
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A function to transform the created instance.
+ * @return A new [Factory] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <R, T> Factory<R>.map(transform: (R) -> T): Factory<T> = Factory { transform(create()) }
 
+/**
+ * Transforms the output of this [FactoryAsync] using the provided [transform] function.
+ *
+ * Creates a new asynchronous factory that applies the transformation to each instance produced by the original factory.
+ *
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A function to transform the created instance.
+ * @return A new [FactoryAsync] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <R, T> FactoryAsync<R>.map(
     transform: (R) -> T
 ): FactoryAsync<T> = FactoryAsync { transform(create()) }
 
+/**
+ * Transforms the output of this [FactoryAsync] using the provided asynchronous [transform] function.
+ *
+ * Creates a new asynchronous factory that applies the asynchronous transformation to each instance produced by the original factory.
+ *
+ * @param R The type of the object produced by the original factory.
+ * @param T The type of the object produced by the new factory.
+ * @param transform A suspend function to transform the created instance.
+ * @return A new [FactoryAsync] that produces instances of type [T].
+ * @since 1.0.0
+ */
 public fun <R, T> FactoryAsync<R>.mapAsync(
     transform: suspend (R) -> T
 ): FactoryAsync<T> = FactoryAsync { transform(create()) }
