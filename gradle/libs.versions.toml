@@ -5,11 +5,15 @@ kotest = "6.1.11"
 ksp = "2.3.6"
 datetime = "0.7.1"
 serialization = "1.11.0"
+atomicfu = "0.32.1"
+coroutines = "1.10.2"
 
 [libraries]
-
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
@@ -28,7 +32,9 @@ kore-common-api = [
 ]
 
 kore-common-impl = [
-    "kotlinx-serialization-json"
+    "kotlinx-serialization-json",
+    "kotlinx-atomicfu",
+    "kotlinx-coroutines-core"
 ]
 
 kore-tests-common-impl = [
