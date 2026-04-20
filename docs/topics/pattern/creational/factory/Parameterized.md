@@ -1,3 +1,0 @@
-# Parameterized
-
-Start typing here...

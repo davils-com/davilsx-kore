@@ -16,9 +16,16 @@
         <toc-element toc-title="Creational">
             <toc-element toc-title="Builder"/>
             <toc-element toc-title="Factory">
-                <toc-element topic="Factory.md"/>
-                <toc-element topic="Parameterized.md"/>
-                <toc-element topic="Memorized.md"/>
+                <toc-element topic="Standard-Factory.md"/>
+                <toc-element topic="Async-Factory.md"/>
+                <toc-element topic="Standard-Parameterized.md"/>
+                <toc-element topic="Async-Parameterized.md"/>
+                <toc-element toc-title="Use Cases">
+                    <toc-element topic="Singleton.md"/>
+                    <toc-element topic="Inheritance.md"/>
+                    <toc-element topic="Dynamic.md"/>
+                    <toc-element topic="Composition.md"/>
+                </toc-element>
             </toc-element>
         </toc-element>
     </toc-element>

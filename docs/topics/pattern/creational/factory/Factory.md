@@ -1,3 +1,0 @@
-# Simple Factory
-
-Start typing here...

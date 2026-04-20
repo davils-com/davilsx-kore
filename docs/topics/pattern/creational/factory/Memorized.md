@@ -1,3 +1,0 @@
-# Memorized
-
-Start typing here...
