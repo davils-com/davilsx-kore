@@ -16,6 +16,8 @@
 
 package com.davils.kore.pattern.creational.factory
 
+import kotlinx.coroutines.CancellationException
+
 /**
  * A functional interface for creating instances of type [R].
  *
@@ -102,7 +104,12 @@ public fun interface FactoryAsync<out R> {
      * @return A [Result] containing the new instance of type [R] or a failure.
      * @since 1.0.0
      */
-    public suspend fun createResult(): Result<R> = runCatching { create() }
+    public suspend fun createResult(): Result<R> = try {
+        Result.success(create())
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
+    }
 
     /**
      * Asynchronously tries to create a new instance of type [R].
@@ -113,9 +120,11 @@ public fun interface FactoryAsync<out R> {
      * @return A new instance of type [R] or null if the creation fails.
      * @since 1.0.0
      */
-    public suspend fun createOrNull(): R? {
-        val result = runCatching { create() }
-        return result.getOrNull()
+    public suspend fun createOrNull(): R? = try {
+        create()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
     }
 
     /**
@@ -128,9 +137,11 @@ public fun interface FactoryAsync<out R> {
      * @return A new instance of type [R] that satisfies the predicate, or null.
      * @since 1.0.0
      */
-    public suspend fun createIf(predicate: suspend (R) -> Boolean): R? {
-        val result = runCatching { create() }
-        return result.getOrNull()?.takeIf { predicate(it) }
+    public suspend fun createIf(predicate: suspend (R) -> Boolean): R? = try {
+        create().takeIf { predicate(it) }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
     }
 }
 

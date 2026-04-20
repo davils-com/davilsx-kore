@@ -16,6 +16,8 @@
 
 package com.davils.kore.pattern.creational.factory
 
+import kotlinx.coroutines.CancellationException
+
 /**
  * A marker interface for parameters used in parameterized factories.
  *
@@ -120,7 +122,12 @@ public fun interface FactoryParameterizedAsync<P : FactoryParameter, out R> {
      * @return A [Result] containing the new instance of type [R] or a failure.
      * @since 1.0.0
      */
-    public suspend fun createResult(parameter: P): Result<R> = runCatching { create(parameter) }
+    public suspend fun createResult(parameter: P): Result<R> = try {
+        Result.success(create(parameter))
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
+    }
 
     /**
      * Asynchronously tries to create a new instance of type [R] using the given [parameter].
@@ -132,9 +139,11 @@ public fun interface FactoryParameterizedAsync<P : FactoryParameter, out R> {
      * @return A new instance of type [R] or null if the creation fails.
      * @since 1.0.0
      */
-    public suspend fun createOrNull(parameter: P): R? {
-        val result = runCatching { create(parameter) }
-        return result.getOrNull()
+    public suspend fun createOrNull(parameter: P): R? = try {
+        create(parameter)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
     }
 
     /**
@@ -148,9 +157,11 @@ public fun interface FactoryParameterizedAsync<P : FactoryParameter, out R> {
      * @return A new instance of type [R] that satisfies the predicate, or null.
      * @since 1.0.0
      */
-    public suspend fun createIf(parameter: P, predicate: (P, R) -> Boolean): R? {
-        val result = createOrNull(parameter)
-        return result?.takeIf { predicate(parameter, it) }
+    public suspend fun createIf(parameter: P, predicate: (P, R) -> Boolean): R? = try {
+        create(parameter).takeIf { predicate(parameter, it) }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
     }
 }
 
