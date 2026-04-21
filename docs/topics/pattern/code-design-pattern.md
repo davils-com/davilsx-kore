@@ -12,3 +12,7 @@ Creational patterns provide various object creation mechanisms, which increase f
 - **[](Async-Factory.md)**: A coroutine-based factory for async object creation.
 - **[](Standard-Parameterized.md)**: A factory that takes input parameters for object creation.
 - **[](Async-Parameterized.md)**: An async factory with input parameters.
+- **[Standard Singleton](Standard-Singleton.md)**: The base interface for shared instances.
+- **[Scoped Singleton](Scoped-Singleton.md)**: A thread-safe, lazily initialized singleton.
+- **[Resettable Singleton](Resettable-Singleton.md)**: A singleton that can be cleared and re-initialized.
+- **[Parameterized Singleton](Parameterized-Singleton.md)**: A singleton that provides an instance based on a parameter.
