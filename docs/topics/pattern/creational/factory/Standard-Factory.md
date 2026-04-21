@@ -63,4 +63,4 @@ val message = stringFactory.create() // "The answer is: 42"
 1.  **Decoupling**: The caller doesn't need to know how the object is constructed.
 2.  **Testability**: Easily swap real implementations with mocks or stubs.
 3.  **Consistency**: Use the same interface for all object creation logic.
-4.  **Advanced Usage**: See [Singleton Factories](usecase/Singleton.md) or [Inheritance](usecase/Inheritance.md) for more details.
+4.  **Advanced Usage**: See [Singleton Factories](Singleton.md) or [Inheritance](Inheritance.md) for more details.

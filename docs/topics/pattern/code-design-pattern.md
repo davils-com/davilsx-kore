@@ -8,7 +8,7 @@ The Kore library provides a set of highly optimized, functional-style implementa
 
 Creational patterns provide various object creation mechanisms, which increase flexibility and reuse of existing code.
 
-- **[Standard Factory](creational/factory/Standard-Factory.md)**: A functional interface for creating objects.
-- **[Asynchronous Factory](creational/factory/Async-Factory.md)**: A coroutine-based factory for async object creation.
-- **[Standard Parameterized Factory](creational/factory/Standard-Parameterized.md)**: A factory that takes input parameters for object creation.
-- **[Asynchronous Parameterized Factory](creational/factory/Async-Parameterized.md)**: An async factory with input parameters.
+- **[](Standard-Factory.md)**: A functional interface for creating objects.
+- **[](Async-Factory.md)**: A coroutine-based factory for async object creation.
+- **[](Standard-Parameterized.md)**: A factory that takes input parameters for object creation.
+- **[](Async-Parameterized.md)**: An async factory with input parameters.

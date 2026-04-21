@@ -65,4 +65,4 @@ val logEntry = logFactory.create(UserConfig("42", "USER"))
 1.  **Dynamic Input**: When object state depends on runtime data.
 2.  **Configurations**: For creating objects based on complex configuration data classes.
 3.  **Registry Systems**: Useful when a parameter acts as a key to determine the specific implementation created.
-4.  **Advanced Usage**: See [Dynamic Factories](usecase/Dynamic.md) for real-world examples.
+4.  **Advanced Usage**: See [Dynamic Factories](Dynamic.md) for real-world examples.
