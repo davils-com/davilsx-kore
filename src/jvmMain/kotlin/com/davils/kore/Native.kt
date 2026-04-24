@@ -17,6 +17,7 @@
 package com.davils.kore
 
 import kotlinx.atomicfu.locks.SynchronizedObject
+
 /**
  * Provides an interface for interacting with native libraries.
  *
