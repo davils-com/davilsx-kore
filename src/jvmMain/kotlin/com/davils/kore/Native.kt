@@ -81,7 +81,7 @@ public object NativeInterface : SynchronizedObject() {
                     loadedLibraries.add(library)
                 } catch (e: UnsatisfiedLinkError) {
                     onException(e)
-                } catch (e: SecurityException) {
+                } catch (e: IllegalCallerException) {
                     onException(e)
                 }
             }
