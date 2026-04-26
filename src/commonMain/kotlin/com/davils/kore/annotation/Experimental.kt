@@ -16,6 +16,14 @@
 
 package com.davils.kore.annotation
 
+/**
+ * Marks an API as experimental in the Kore library.
+ *
+ * Experimental APIs are subject to change or removal in future releases.
+ * Using such APIs requires explicit opt-in to acknowledge the experimental nature.
+ *
+ * @since 1.0.0
+ */
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)

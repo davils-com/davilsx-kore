@@ -16,6 +16,14 @@
 
 package com.davils.kore.annotation
 
+/**
+ * Marks an API as internal to the Kore library.
+ *
+ * Internal APIs are not intended for public use and may change without notice.
+ * Using such APIs is discouraged and requires explicit opt-in with an error-level warning.
+ *
+ * @since 1.0.0
+ */
 @RequiresOptIn(level = RequiresOptIn.Level.ERROR)
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)

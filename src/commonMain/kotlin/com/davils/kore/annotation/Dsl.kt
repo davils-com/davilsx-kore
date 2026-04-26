@@ -16,6 +16,14 @@
 
 package com.davils.kore.annotation
 
+/**
+ * Marker annotation for Kore DSL.
+ *
+ * This annotation is used to restrict the scope of DSL calls to the immediate receiver,
+ * preventing accidental usage of outer scopes in nested DSL structures.
+ *
+ * @since 1.0.0
+ */
 @DslMarker
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.BINARY)
