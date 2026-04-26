@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.21"
-kreate = "1.1.0"
+kreate = "1.1.1"
 kotest = "6.1.11"
 ksp = "2.3.7"
 datetime = "0.7.1"
