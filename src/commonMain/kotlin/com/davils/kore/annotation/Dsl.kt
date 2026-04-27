@@ -27,4 +27,5 @@ package com.davils.kore.annotation
 @DslMarker
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.BINARY)
+@MustBeDocumented
 public annotation class KoreDsl

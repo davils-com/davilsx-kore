@@ -27,4 +27,5 @@ package com.davils.kore.annotation
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
+@MustBeDocumented
 public annotation class KoreExperimental
