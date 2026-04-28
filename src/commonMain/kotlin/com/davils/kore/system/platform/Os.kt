@@ -82,14 +82,14 @@ public enum class Os(
      *
      * @since 1.0.0
      */
-    WEB_WASM("webassembly"),
+    WASM("webassembly"),
 
     /**
      * Web platform using JavaScript.
      *
      * @since 1.0.0
      */
-    WEB_JS("javascript"),
+    JS("javascript"),
 
     /**
      * Apple tvOS operating system.
