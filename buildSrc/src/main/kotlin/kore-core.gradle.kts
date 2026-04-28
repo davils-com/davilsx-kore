@@ -3,6 +3,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
+    com.android.kotlin.multiplatform.library
     org.jetbrains.kotlin.multiplatform
     com.google.devtools.ksp
     com.davils.kreate
@@ -76,4 +77,15 @@ kotlin {
     watchosArm64()
     watchosSimulatorArm64()
     watchosDeviceArm64()
+
+    android {
+        compileSdk { version = release(36) }
+        namespace = "com.davils.kore"
+        minSdk = 26
+        withJava()
+
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+    }
 }
