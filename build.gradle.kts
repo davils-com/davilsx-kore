@@ -4,6 +4,13 @@ plugins {
 
 kotlin {
     sourceSets {
+        androidHostTest {
+            dependencies {
+                implementation(libs.bundles.kore.tests.common.impl)
+                implementation(libs.bundles.kore.tests.jvm.impl)
+            }
+        }
+
         commonMain {
             dependencies {
                 implementation(libs.bundles.kore.common.impl)
