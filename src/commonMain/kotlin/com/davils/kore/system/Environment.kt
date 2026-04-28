@@ -22,8 +22,3 @@ public expect object Environment {
     public val isSupported: Boolean
     public fun get(key: String): String?
 }
-
-public fun main(){
-    val saft = Environment.get("PATH")
-    println(saft)
-}
