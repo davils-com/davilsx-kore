@@ -7,6 +7,7 @@ datetime = "0.7.1"
 serialization = "1.11.0"
 atomicfu = "0.32.1"
 coroutines = "1.10.2"
+android = "9.1.1"
 
 [libraries]
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
@@ -25,6 +26,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kreate-gradle-plugin = { module = "com.davils.kreate:com.davils.kreate.gradle.plugin", version.ref = "kreate" }
 kotest-gradle-plugin = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+android-kotlin-library = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "android" }
 
 [bundles]
 kore-common-api = [
@@ -51,5 +53,6 @@ build-src = [
     "kotlin-gradle-plugin",
     "kreate-gradle-plugin",
     "kotest-gradle-plugin",
-    "ksp-gradle-plugin"
+    "ksp-gradle-plugin",
+    "android-kotlin-library"
 ]
