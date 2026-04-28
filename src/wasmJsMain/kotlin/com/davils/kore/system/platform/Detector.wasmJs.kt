@@ -40,5 +40,5 @@ internal actual object OsDetector {
      * @since 1.0.0
      */
     actual val os: Os
-        get() = Os.UNKNOWN
+        get() = Os.WASM
 }
