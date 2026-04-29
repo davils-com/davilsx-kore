@@ -1,0 +1,200 @@
+/*
+ * Copyright 2026 Davils
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.davils.kore
+
+/**
+ * A generic provider for retrieving values by key.
+ *
+ * This interface defines a standard way to access configuration values, environment variables,
+ * or any other key-value based data. It provides various methods for safe retrieval,
+ * default values, and functional transformations.
+ *
+ * @param T The type of the values provided.
+ * @since 1.0.0
+ */
+public interface ValueProvider<T> {
+    /**
+     * Retrieves the value associated with the specified key, or `null` if not found.
+     *
+     * @param key The key to look up.
+     * @return The value associated with the key, or `null` if it does not exist.
+     * @since 1.0.0
+     */
+    public fun getOrNull(key: String): T?
+
+    /**
+     * Retrieves the value associated with the specified key or throws an exception if not found.
+     *
+     * @param key The key to look up.
+     * @return The value associated with the key.
+     * @throws NoSuchElementException If the key is not found.
+     * @since 1.0.0
+     */
+    public fun getOrThrow(key: String): T = getOrNull(key) ?: throw NoSuchElementException("Environment variable '$key' is not set.")
+
+    /**
+     * Retrieves values for multiple keys and returns them as a map.
+     *
+     * Only keys that have an associated value will be included in the resulting map.
+     *
+     * @param keys An iterable of keys to retrieve.
+     * @return A map containing the keys and their corresponding values.
+     * @since 1.0.0
+     */
+    public fun getAll(keys: Iterable<String>): Map<String, T> {
+        val result = mutableMapOf<String, T>()
+        for (key in keys) {
+            val value = getOrNull(key) ?: continue
+            result[key] = value
+        }
+        return result
+    }
+
+    /**
+     * Retrieves the value associated with the key, or returns the [default] value if not found.
+     *
+     * @param key The key to look up.
+     * @param default The value to return if the key is not found.
+     * @return The value associated with the key, or the provided default value.
+     * @since 1.0.0
+     */
+    public fun getOrDefault(key: String, default: T): T = getOrNull(key) ?: default
+
+    /**
+     * Retrieves the value associated with the key wrapped in a [Result].
+     *
+     * @param key The key to look up.
+     * @return A [Result] containing the value if found, or a failure if not.
+     * @since 1.0.0
+     */
+    public fun getResult(key: String): Result<T> = runCatching { getOrThrow(key) }
+
+    /**
+     * Retrieves the value associated with the key or a default value, wrapped in a [Result].
+     *
+     * @param key The key to look up.
+     * @param default The default value to use if the key is not found.
+     * @return A [Result] containing the value or the default value.
+     * @since 1.0.0
+     */
+    public fun getOrDefaultResult(key: String, default: T): Result<T> = runCatching { getOrDefault(key, default) }
+
+    /**
+     * Executes a block with the value associated with the key (which may be null).
+     *
+     * @param key The key to look up.
+     * @param block The block to execute with the retrieved value.
+     * @param R The return type of the block.
+     * @return The result of the block execution.
+     * @since 1.0.0
+     */
+    public fun <R> withGetOrNull(key: String, block: (T?) -> R?): R? = block(getOrNull(key))
+
+    /**
+     * Executes a block with the value associated with the key or throws if not found.
+     *
+     * @param key The key to look up.
+     * @param block The block to execute with the retrieved value.
+     * @param R The return type of the block.
+     * @return The result of the block execution.
+     * @throws NoSuchElementException If the key is not found.
+     * @since 1.0.0
+     */
+    public fun <R> withGet(key: String, block: (T) -> R): R = block(getOrThrow(key))
+
+    /**
+     * Executes a block with the value associated with the key or a default value.
+     *
+     * @param key The key to look up.
+     * @param default The value to use if the key is not found.
+     * @param block The block to execute with the value.
+     * @param R The return type of the block.
+     * @return The result of the block execution.
+     * @since 1.0.0
+     */
+    public fun <R> withGetOrDefault(key: String, default: T, block: (T) -> R): R = block(getOrDefault(key, default))
+
+    /**
+     * Executes a block with the [Result] of retrieving the value for the key.
+     *
+     * @param key The key to look up.
+     * @param block The block to execute with the [Result].
+     * @param R The return type of the block.
+     * @return The result of the block execution.
+     * @since 1.0.0
+     */
+    public fun <R> withGetResult(key: String, block: (Result<T>) -> R): R = block(getResult(key))
+
+    /**
+     * Executes a block with the [Result] of retrieving the value for the key or a default.
+     *
+     * @param key The key to look up.
+     * @param default The default value to use if the key is not found.
+     * @param block The block to execute with the [Result].
+     * @param R The return type of the block.
+     * @return The result of the block execution.
+     * @since 1.0.0
+     */
+    public fun <R> withGetOrDefaultResult(key: String, default: T, block: (Result<T>) -> R): R = block(getOrDefaultResult(key, default))
+
+    /**
+     * Transforms the value associated with the key using the provided [transform] function.
+     *
+     * @param key The key to look up.
+     * @param transform The transformation function to apply to the value (which may be null).
+     * @param R The result type of the transformation.
+     * @return The result of the transformation.
+     * @since 1.0.0
+     */
+    public fun <R> mapOrNull(key: String, transform: (T?) -> R?): R? {
+        val value = getOrNull(key)
+        return transform(value)
+    }
+
+    /**
+     * Transforms the value associated with the key or throws if not found.
+     *
+     * @param key The key to look up.
+     * @param transform The transformation function to apply to the retrieved value.
+     * @param R The result type of the transformation.
+     * @return The result of the transformation.
+     * @throws NoSuchElementException If the key is not found.
+     * @since 1.0.0
+     */
+    public fun <R> map(key: String, transform: (T) -> R): R {
+        val value = getOrThrow(key)
+        return transform(value)
+    }
+
+    /**
+     * Checks if a value exists for the specified key.
+     *
+     * @param key The key to check.
+     * @return `true` if a value exists for the key, `false` otherwise.
+     * @since 1.0.0
+     */
+    public operator fun contains(key: String): Boolean = getOrNull(key) != null
+
+    /**
+     * Retrieves the value associated with the key using the index operator.
+     *
+     * @param key The key to look up.
+     * @return The value associated with the key, or `null` if not found.
+     * @since 1.0.0
+     */
+    public operator fun get(key: String): T? = getOrNull(key)
+}
