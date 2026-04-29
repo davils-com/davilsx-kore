@@ -34,7 +34,7 @@ public interface ValueProvider<T> {
      * @return The value associated with the key, or `null` if it does not exist.
      * @since 1.0.0
      */
-    public fun getOrNull(key: String): T?
+    public fun getValueOrNull(key: String): T?
 
     /**
      * Retrieves the value associated with the specified key or throws an exception if not found.
@@ -44,7 +44,7 @@ public interface ValueProvider<T> {
      * @throws NoSuchElementException If the key is not found.
      * @since 1.0.0
      */
-    public fun getOrThrow(key: String): T = getOrNull(key) ?: throw NoSuchElementException("Environment variable '$key' is not set.")
+    public fun getValueOrThrow(key: String): T = getValueOrNull(key) ?: throw NoSuchElementException("Environment variable '$key' is not set.")
 
     /**
      * Retrieves values for multiple keys and returns them as a map.
@@ -55,10 +55,10 @@ public interface ValueProvider<T> {
      * @return A map containing the keys and their corresponding values.
      * @since 1.0.0
      */
-    public fun getAll(keys: Iterable<String>): Map<String, T> {
+    public fun getAllValues(keys: Iterable<String>): Map<String, T> {
         val result = mutableMapOf<String, T>()
         for (key in keys) {
-            val value = getOrNull(key) ?: continue
+            val value = getValueOrNull(key) ?: continue
             result[key] = value
         }
         return result
@@ -72,7 +72,7 @@ public interface ValueProvider<T> {
      * @return The value associated with the key, or the provided default value.
      * @since 1.0.0
      */
-    public fun getOrDefault(key: String, default: T): T = getOrNull(key) ?: default
+    public fun getValueOrDefault(key: String, default: T): T = getValueOrNull(key) ?: default
 
     /**
      * Retrieves the value associated with the key wrapped in a [Result].
@@ -81,7 +81,7 @@ public interface ValueProvider<T> {
      * @return A [Result] containing the value if found, or a failure if not.
      * @since 1.0.0
      */
-    public fun getResult(key: String): Result<T> = runCatching { getOrThrow(key) }
+    public fun getValueResult(key: String): Result<T> = runCatching { getValueOrThrow(key) }
 
     /**
      * Retrieves the value associated with the key or a default value, wrapped in a [Result].
@@ -91,7 +91,7 @@ public interface ValueProvider<T> {
      * @return A [Result] containing the value or the default value.
      * @since 1.0.0
      */
-    public fun getOrDefaultResult(key: String, default: T): Result<T> = runCatching { getOrDefault(key, default) }
+    public fun getValueOrDefaultResult(key: String, default: T): Result<T> = runCatching { getValueOrDefault(key, default) }
 
     /**
      * Executes a block with the value associated with the key (which may be null).
@@ -102,7 +102,7 @@ public interface ValueProvider<T> {
      * @return The result of the block execution.
      * @since 1.0.0
      */
-    public fun <R> withGetOrNull(key: String, block: (T?) -> R?): R? = block(getOrNull(key))
+    public fun <R> useValueOrNull(key: String, block: (T?) -> R?): R? = block(getValueOrNull(key))
 
     /**
      * Executes a block with the value associated with the key or throws if not found.
@@ -114,7 +114,7 @@ public interface ValueProvider<T> {
      * @throws NoSuchElementException If the key is not found.
      * @since 1.0.0
      */
-    public fun <R> withGet(key: String, block: (T) -> R): R = block(getOrThrow(key))
+    public fun <R> useValue(key: String, block: (T) -> R): R = block(getValueOrThrow(key))
 
     /**
      * Executes a block with the value associated with the key or a default value.
@@ -126,7 +126,7 @@ public interface ValueProvider<T> {
      * @return The result of the block execution.
      * @since 1.0.0
      */
-    public fun <R> withGetOrDefault(key: String, default: T, block: (T) -> R): R = block(getOrDefault(key, default))
+    public fun <R> useValueOrDefault(key: String, default: T, block: (T) -> R): R = block(getValueOrDefault(key, default))
 
     /**
      * Executes a block with the [Result] of retrieving the value for the key.
@@ -137,7 +137,7 @@ public interface ValueProvider<T> {
      * @return The result of the block execution.
      * @since 1.0.0
      */
-    public fun <R> withGetResult(key: String, block: (Result<T>) -> R): R = block(getResult(key))
+    public fun <R> useValueResult(key: String, block: (Result<T>) -> R): R = block(getValueResult(key))
 
     /**
      * Executes a block with the [Result] of retrieving the value for the key or a default.
@@ -149,7 +149,7 @@ public interface ValueProvider<T> {
      * @return The result of the block execution.
      * @since 1.0.0
      */
-    public fun <R> withGetOrDefaultResult(key: String, default: T, block: (Result<T>) -> R): R = block(getOrDefaultResult(key, default))
+    public fun <R> useValueOrDefaultResult(key: String, default: T, block: (Result<T>) -> R): R = block(getValueOrDefaultResult(key, default))
 
     /**
      * Transforms the value associated with the key using the provided [transform] function.
@@ -160,8 +160,8 @@ public interface ValueProvider<T> {
      * @return The result of the transformation.
      * @since 1.0.0
      */
-    public fun <R> mapOrNull(key: String, transform: (T?) -> R?): R? {
-        val value = getOrNull(key)
+    public fun <R> mapValueOrNull(key: String, transform: (T?) -> R?): R? {
+        val value = getValueOrNull(key)
         return transform(value)
     }
 
@@ -175,8 +175,8 @@ public interface ValueProvider<T> {
      * @throws NoSuchElementException If the key is not found.
      * @since 1.0.0
      */
-    public fun <R> map(key: String, transform: (T) -> R): R {
-        val value = getOrThrow(key)
+    public fun <R> mapValue(key: String, transform: (T) -> R): R {
+        val value = getValueOrThrow(key)
         return transform(value)
     }
 
@@ -187,7 +187,7 @@ public interface ValueProvider<T> {
      * @return `true` if a value exists for the key, `false` otherwise.
      * @since 1.0.0
      */
-    public operator fun contains(key: String): Boolean = getOrNull(key) != null
+    public operator fun contains(key: String): Boolean = getValueOrNull(key) != null
 
     /**
      * Retrieves the value associated with the key using the index operator.
@@ -196,5 +196,5 @@ public interface ValueProvider<T> {
      * @return The value associated with the key, or `null` if not found.
      * @since 1.0.0
      */
-    public operator fun get(key: String): T? = getOrNull(key)
+    public operator fun get(key: String): T? = getValueOrNull(key)
 }
