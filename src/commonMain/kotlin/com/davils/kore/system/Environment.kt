@@ -18,6 +18,7 @@
 
 package com.davils.kore.system
 
+import com.davils.kore.ValueProvider
 import com.davils.kore.annotation.KoreDsl
 import com.davils.kore.system.platform.Platform
 
@@ -58,7 +59,7 @@ public expect object Environment {
  * @since 1.0.0
  */
 @KoreDsl
-public class EnvironmentScope internal constructor() {
+public class EnvironmentScope internal constructor() : ValueProvider<String> {
     /**
      * Retrieves the value of the specified environment variable.
      *
@@ -67,169 +68,7 @@ public class EnvironmentScope internal constructor() {
      * is not set or environment access is not supported.
      * @since 1.0.0
      */
-    public fun getOrNull(key: String): String? = Environment.getOrNull(key)
-
-    /**
-     * Retrieves the value of the specified environment variable or throws an exception.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @return The value of the environment variable.
-     * @throws NoSuchElementException If the environment variable is not set.
-     * @since 1.0.0
-     */
-    public fun getOrThrow(key: String): String = getOrNull(key) ?: throw NoSuchElementException("Environment variable '$key' is not set.")
-
-    /**
-     * Retrieves multiple environment variables and returns them as a map.
-     *
-     * Only variables that are actually set will be included in the resulting map.
-     *
-     * @param keys An iterable of environment variable names to retrieve.
-     * @return A map containing the keys and their corresponding environment variable values.
-     * @since 1.0.0
-     */
-    public fun getAll(keys: Iterable<String>): Map<String, String> {
-        val result = mutableMapOf<String, String>()
-        for (key in keys) {
-            val value = getOrNull(key) ?: continue
-            result[key] = value
-        }
-        return result
-    }
-
-    /**
-     * Retrieves the value of the specified environment variable or returns a default value.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param default The value to return if the environment variable is not set.
-     * @return The value of the environment variable, or the provided default value.
-     * @since 1.0.0
-     */
-    public fun getOrDefault(key: String, default: String): String = getOrNull(key) ?: default
-
-    /**
-     * Retrieves the value of the specified environment variable wrapped in a [Result].
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @return A [Result] containing the environment variable value, or a failure if not set.
-     * @since 1.0.0
-     */
-    public fun getResult(key: String): Result<String> = runCatching { getOrThrow(key) }
-
-    /**
-     * Retrieves the value of the specified environment variable or a default, wrapped in a [Result].
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param default The default value to use if the environment variable is not set.
-     * @return A [Result] containing the environment variable value or the default value.
-     * @since 1.0.0
-     */
-    public fun getOrDefaultResult(key: String, default: String): Result<String> = runCatching { getOrDefault(key, default) }
-
-    /**
-     * Executes a block with the value of the specified environment variable.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param block The block to execute with the environment variable value (which may be null).
-     * @param T The return type of the block.
-     * @return The result of the block execution.
-     * @since 1.0.0
-     */
-    public fun <T> withGetOrNull(key: String, block: (String?) -> T?): T? = block(getOrNull(key))
-
-    /**
-     * Executes a block with the value of the specified environment variable or throws if not set.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param block The block to execute with the environment variable value.
-     * @param T The return type of the block.
-     * @return The result of the block execution.
-     * @throws NoSuchElementException If the environment variable is not set.
-     * @since 1.0.0
-     */
-    public fun <T> withGet(key: String, block: (String) -> T): T = block(getOrThrow(key))
-
-    /**
-     * Executes a block with the value of the specified environment variable or a default value.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param default The value to use if the environment variable is not set.
-     * @param block The block to execute with the retrieved or default value.
-     * @param T The return type of the block.
-     * @return The result of the block execution.
-     * @since 1.0.0
-     */
-    public fun <T> withGetOrDefault(key: String, default: String, block: (String) -> T): T = block(getOrDefault(key, default))
-
-    /**
-     * Executes a block with the [Result] of retrieving the specified environment variable.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param block The block to execute with the [Result].
-     * @param T The return type of the block.
-     * @return The result of the block execution.
-     * @since 1.0.0
-     */
-    public fun <T> withGetResult(key: String, block: (Result<String>) -> T): T = block(getResult(key))
-
-    /**
-     * Executes a block with the [Result] of retrieving the specified environment variable or a default.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param default The default value to use if the environment variable is not set.
-     * @param block The block to execute with the [Result].
-     * @param T The return type of the block.
-     * @return The result of the block execution.
-     * @since 1.0.0
-     */
-    public fun <T> withGetOrDefaultResult(key: String, default: String, block: (Result<String>) -> T): T = block(getOrDefaultResult(key, default))
-
-    /**
-     * Transforms the value of the specified environment variable.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param transform The transformation function to apply to the environment variable value.
-     * @param T The result type of the transformation.
-     * @return The result of the transformation.
-     * @since 1.0.0
-     */
-    public fun <T> mapOrNull(key: String, transform: (String?) -> T?): T? {
-        val value = getOrNull(key)
-        return transform(value)
-    }
-
-    /**
-     * Transforms the value of the specified environment variable or throws if not set.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @param transform The transformation function to apply to the environment variable value.
-     * @param T The result type of the transformation.
-     * @return The result of the transformation.
-     * @throws NoSuchElementException If the environment variable is not set.
-     * @since 1.0.0
-     */
-    public fun <T> map(key: String, transform: (String) -> T): T {
-        val value = getOrThrow(key)
-        return transform(value)
-    }
-
-    /**
-     * Checks if the specified environment variable is set.
-     *
-     * @param key The name of the environment variable to check.
-     * @return `true` if the environment variable is set, `false` otherwise.
-     * @since 1.0.0
-     */
-    public operator fun contains(key: String): Boolean = getOrNull(key) != null
-
-    /**
-     * Retrieves the value of the specified environment variable using the index operator.
-     *
-     * @param key The name of the environment variable to retrieve.
-     * @return The value of the environment variable, or `null` if not set.
-     * @since 1.0.0
-     */
-    public operator fun get(key: String): String? = getOrNull(key)
+    override fun getOrNull(key: String): String? = Environment.getOrNull(key)
 }
 
 /**
