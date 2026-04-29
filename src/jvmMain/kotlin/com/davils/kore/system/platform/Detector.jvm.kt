@@ -18,6 +18,8 @@
 
 package com.davils.kore.system.platform
 
+import com.davils.kore.system.properties
+
 internal actual object OsDetector {
     /**
      * Keywords used to identify Windows operating systems.
@@ -54,7 +56,10 @@ internal actual object OsDetector {
      * @since 1.0.0
      */
     actual val os: Os by lazy {
-        detectOs(System.getProperty("os.name"))
+        val osName = properties {
+            getValueOrThrow("os.name")
+        }
+        detectOs(osName)
     }
 
     /**
