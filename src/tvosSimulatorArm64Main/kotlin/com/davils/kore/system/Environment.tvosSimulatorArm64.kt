@@ -23,11 +23,29 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.toKString
 import platform.posix.getenv
 
+/**
+ * Provides access to system environment variables.
+ *
+ * @since 1.0.0
+ */
 public actual object Environment {
+    /**
+     * Indicates whether the current platform supports environment variable access.
+     *
+     * @since 1.0.0
+     */
     public actual val isSupported: Boolean
         get() = true
 
-    public actual fun get(key: String): String? {
+    /**
+     * Retrieves the value of the specified environment variable.
+     *
+     * @param key The name of the environment variable to retrieve.
+     * @return The value of the environment variable, or `null` if the variable
+     * is not set or environment access is not supported.
+     * @since 1.0.0
+     */
+    internal actual fun getOrNull(key: String): String? {
         return getenv(key)?.toKString()
     }
 }

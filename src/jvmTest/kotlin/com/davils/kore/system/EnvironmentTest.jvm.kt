@@ -16,8 +16,6 @@
 
 package com.davils.kore.system
 
-import com.davils.kore.system.platform.Os
-import com.davils.kore.system.platform.OsDetector
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -29,11 +27,11 @@ class EnvironmentTestJvm : FunSpec({
         }
 
         test("get should return null for non-existent keys") {
-            Environment.get("NON_EXISTENT_KEY") shouldBe null
+            Environment.getOrNull("NON_EXISTENT_KEY") shouldBe null
         }
 
         test("get should return correct value for existing keys") {
-            Environment.get("PATH") shouldNotBe null
+            Environment.getOrNull("PATH") shouldNotBe null
         }
     }
 })

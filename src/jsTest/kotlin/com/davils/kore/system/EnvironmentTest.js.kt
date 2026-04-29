@@ -26,7 +26,7 @@ class EnvironmentTestJs : FunSpec({
         }
 
         test("get should always return null") {
-            Environment.get("ANY_KEY") shouldBe null
+            Environment.getOrNull("ANY_KEY") shouldBe null
         }
     }
 })
