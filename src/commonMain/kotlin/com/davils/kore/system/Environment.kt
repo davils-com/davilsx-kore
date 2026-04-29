@@ -68,7 +68,7 @@ public class EnvironmentScope internal constructor() : ValueProvider<String> {
      * is not set or environment access is not supported.
      * @since 1.0.0
      */
-    override fun getOrNull(key: String): String? = Environment.getOrNull(key)
+    override fun getValueOrNull(key: String): String? = Environment.getOrNull(key)
 }
 
 /**
