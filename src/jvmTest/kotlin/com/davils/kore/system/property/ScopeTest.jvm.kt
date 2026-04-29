@@ -17,7 +17,6 @@
 package com.davils.kore.system.property
 
 import com.davils.kore.system.PropertiesScope
-import com.davils.kore.system.properties
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.system.withSystemProperty
 import io.kotest.extensions.system.withSystemProperties
