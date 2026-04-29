@@ -30,7 +30,7 @@ public object Platform {
      *
      * @since 1.0.0
      */
-    public val os: Os
+    public val current: Os
         get() = OsDetector.os
 
     /**
@@ -47,7 +47,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isWindows: Boolean
-        get() = os == Os.WINDOWS
+        get() = current == Os.WINDOWS
 
     /**
      * Indicates whether the current operating system is Linux.
@@ -55,7 +55,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isLinux: Boolean
-        get() = os == Os.LINUX
+        get() = current == Os.LINUX
 
     /**
      * Indicates whether the current operating system is Apple macOS.
@@ -63,7 +63,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isMacos: Boolean
-        get() = os == Os.MACOS
+        get() = current == Os.MACOS
 
     /**
      * Indicates whether the current operating system is Apple iOS.
@@ -71,7 +71,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isIos: Boolean
-        get() = os == Os.IOS
+        get() = current == Os.IOS
 
     /**
      * Indicates whether the current operating system is Google Android.
@@ -79,7 +79,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isAndroid: Boolean
-        get() = os == Os.ANDROID
+        get() = current == Os.ANDROID
 
     /**
      * Indicates whether the current platform is a Web browser (either JS or WASM).
@@ -87,7 +87,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isWeb: Boolean
-        get() = os == Os.JS || os == Os.WASM
+        get() = current == Os.JS || current == Os.WASM
 
     /**
      * Indicates whether the current operating system is Apple tvOS.
@@ -95,7 +95,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isTvOs: Boolean
-        get() = os == Os.TVOS
+        get() = current == Os.TVOS
 
     /**
      * Indicates whether the current operating system is Apple watchOS.
@@ -103,7 +103,7 @@ public object Platform {
      * @since 1.0.0
      */
     public val isWatchOs: Boolean
-        get() = os == Os.WATCHOS
+        get() = current == Os.WATCHOS
 
     /**
      * Indicates whether the current operating system is a Unix-based system.
