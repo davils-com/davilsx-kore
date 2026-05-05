@@ -1,4 +1,8 @@
 plugins {
+    `kore-compliance-security`
+    `kore-code-analysis`
+    `kore-testing`
+    `kore-publish`
     `kore-core`
 }
 
