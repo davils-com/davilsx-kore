@@ -1,102 +1,42 @@
+/*
+ * Copyright 2026 Davils
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalWasmDsl::class)
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import com.davils.buildsrc.Project
 
 plugins {
     com.android.kotlin.multiplatform.library
     org.jetbrains.kotlin.multiplatform
-    com.google.devtools.ksp
     com.davils.kreate
-    `maven-publish`
-    io.kotest
 }
+
+group = Project.Identity.GROUP
 
 kreate {
     project {
         name = "davilsx-kore"
-        description = " The core library of the DavilsX ecosystem, providing essential utilities and abstractions for Kotlin Multiplatform projects. "
+        description = "The core library of the DavilsX ecosystem, providing essential utilities and abstractions for Kotlin Multiplatform projects. "
 
-        docs {
-            enabled = true
-            moduleName = "Kore"
-            outputDirectory = "dokka"
+        platform {
+            javaVersion = JavaVersion.VERSION_25
+            explicitApi = true
+            allWarningsAsErrors = true
         }
-
-        tests {
-            enabled = true
-            maxParallelForks = Runtime.getRuntime().availableProcessors()
-            ignoreFailures = false
-            alwaysRunTests = false
-            failOnNoDiscoveredTests = false
-
-            logging {
-                logPassedTests = true
-                logSkippedTests = true
-                logTestStarted = true
-            }
-
-            report {
-                enabled = true
-                xml = true
-                html = false
-            }
-        }
-
-        publish {
-            enabled = true
-            inceptionYear = 2026
-            website = "https://github.com/davils-com/davilsx-kore"
-
-            pom {
-                issueManagement {
-                    system = "Github Issues"
-                    url = "https://github.com/davils-com/davilsx-kore/issues"
-                }
-
-                ciManagement {
-                    system = "Github Actions"
-                    url = "https://github.com/davils-com/davilsx-kore/actions"
-                }
-
-                licenses {
-                    license {
-                        name = "Apache 2.0"
-                        url = "https://github.com/davils-com/davilsx-kore/blob/main/LICENSE"
-                        distribution = "repo"
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = "davils"
-                        name = "Davils"
-                        email = "development@davils.com"
-                        organization = "Davils"
-                        timezone = "Europe/Berlin"
-                    }
-                }
-
-                scm {
-                    url = "https://github.com/davils-com/davilsx-kore.git"
-                    connection = "scm:git:https://github.com/davils-com/davilsx-kore.git"
-                    developerConnection = "scm:git@github.com:davils-com/davilsx-kore.git"
-                }
-            }
-
-            repositories {
-                mavenCentral {
-                    enabled = true
-                    signPublications = true
-                    automaticRelease = true
-                }
-            }
-        }
-    }
-
-    platform {
-        javaVersion = JavaVersion.VERSION_25
-        explicitApi = true
-        allWarningsAsErrors = true
     }
 }
 
@@ -130,9 +70,9 @@ kotlin {
     watchosDeviceArm64()
 
     android {
-        compileSdk { version = release(36) }
-        namespace = "com.davils.kore"
-        minSdk = 26
+        compileSdk { version = release(Project.Android.COMPILE_SDK) }
+        namespace = "${Project.Identity.GROUP}.kore"
+        minSdk = Project.Android.MIN_SDK
         withJava()
 
         withHostTest {
