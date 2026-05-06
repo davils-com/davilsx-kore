@@ -23,11 +23,14 @@ plugins {
     com.davils.kreate
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 kreate {
     project {
         trivy {
             enabled = true
-            disableDependencyLocking = true
 
             vulnerability {
                 score = listOf(Score.CRITICAL, Score.HIGH, Score.MEDIUM, Score.LOW)
