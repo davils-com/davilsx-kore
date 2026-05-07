@@ -14,64 +14,101 @@
  * limitations under the License.
  */
 
-//@file:OptIn(ExperimentalUuidApi::class)
-
 package com.davils.kore.uuid
 
-public interface Uuid : Comparable<Uuid> {
-    
-}
+import kotlin.reflect.KProperty
 
-//import kotlin.uuid.ExperimentalUuidApi
-//import kotlin.uuid.Uuid as KUuid
-//
-//public class Uuid : Comparable<Uuid> {
-//    public val value: String
-//    public val version: UuidVersion
-//
-//    public constructor(value: String, version: UuidVersion = UuidVersion.V7) {
-//        this.version = version
-//        validate()
-//
-//        this.value = value
-//    }
-//
-//    public constructor(uuid: Uuid) : this(uuid.value, uuid.version)
-//
-//    public constructor(version: UuidVersion = UuidVersion.V7) {
-//        this.version = version
-//        val uuid = when (version) {
-//            UuidVersion.V4 -> KUuid.generateV4()
-//            UuidVersion.V7 -> KUuid.generateV7()
-//        }
-//
-//        validate()
-//        this.value = uuid.toString()
-//    }
-//
-//    override fun compareTo(other: Uuid): Int {
-//        TODO("Not yet implemented")
-//    }
-//
-//    private fun validate() {
-//        val isValid = when (version) {
-//            UuidVersion.V4 -> isValidUuidV4(value)
-//            UuidVersion.V7 -> isValidUuidV7(value)
-//        }
-//        if (!isValid) {
-//            throw IllegalArgumentException("Invalid UUID for version: $version -> $value")
-//        }
-//    }
-//
-//    public companion object {
-//        public const val REGEX_V7_PATTERN: String = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
-//        public const val REGEX_V4_PATTERN: String = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
-//
-//        private val regexV7: Regex = Regex(REGEX_V7_PATTERN)
-//        private val regexV4: Regex = Regex(REGEX_V4_PATTERN)
-//
-//        public fun isValidUuidV7(uuid: String): Boolean = uuid.matches(regexV7)
-//        public fun isValidUuidV4(uuid: String): Boolean = uuid.matches(regexV4)
-//        public fun random(version: UuidVersion = UuidVersion.V7): Uuid = Uuid(version)
-//    }
-//}
+/**
+ * Base class for Universally Unique Identifiers (UUID).
+ *
+ * This class provides common functionality for different UUID versions,
+ * including comparison, equality, and property delegation.
+ *
+ * @since 1.0.0
+ */
+public abstract class Uuid : Comparable<Uuid> {
+    /**
+     * The string representation of the UUID.
+     *
+     * @since 1.0.0
+     */
+    public abstract val value: String
+
+    /**
+     * Validates the format of the UUID value.
+     *
+     * This method is called during construction to ensure the value conforms
+     * to the specific UUID version's constraints.
+     *
+     * @throws IllegalArgumentException If the value is not a valid UUID of the expected version.
+     * @since 1.0.0
+     */
+    protected abstract fun validate()
+
+    /**
+     * Compares this UUID with the specified UUID for order.
+     *
+     * @param other The UUID to be compared.
+     * @return A negative integer, zero, or a positive integer as this UUID is less than, equal to, or greater than the specified UUID.
+     * @since 1.0.0
+     */
+    override fun compareTo(other: Uuid): Int = value.compareTo(other.value)
+
+    /**
+     * Returns the string representation of the UUID.
+     *
+     * @return The UUID string value.
+     * @since 1.0.0
+     */
+    override fun toString(): String = value
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param other The object to compare with.
+     * @return True if the other object is a [Uuid] with the same string value, false otherwise.
+     * @since 1.0.0
+     */
+    override fun equals(other: Any?): Boolean = other is Uuid && other.value == value
+
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return The hash code of the UUID string value.
+     * @since 1.0.0
+     */
+    override fun hashCode(): Int = value.hashCode()
+
+    /**
+     * Property delegate that returns the UUID string value.
+     *
+     * @param thisRef The object that owns the property.
+     * @param property The property metadata.
+     * @return The UUID string value.
+     * @since 1.0.0
+     */
+    public operator fun getValue(thisRef: Any?, property: KProperty<*>): String = value
+
+    /**
+     * Factory methods for creating random UUIDs.
+     *
+     * @since 1.0.0
+     */
+    public companion object {
+        /**
+         * Generates a new random UUID v4.
+         *
+         * @return A new [UuidV4] instance.
+         * @since 1.0.0
+         */
+        public fun randomUuidV4(): UuidV4 = UuidV4()
+
+        /**
+         * Generates a new random UUID v7.
+         *
+         * @return A new [UuidV7] instance.
+         * @since 1.0.0
+         */
+        public fun randomUuidV7(): UuidV7 = UuidV7()
+    }
+}

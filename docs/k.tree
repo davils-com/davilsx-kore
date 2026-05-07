@@ -4,33 +4,13 @@
 
 <instance-profile id="k"
                  name="Kore"
-                 start-page="overview.md">
+                 start-page="Overview.md">
 
-    <toc-element topic="overview.md"/>
-    <toc-element topic="annotations.md">
-        <toc-element topic="dsl.md"/>
-        <toc-element topic="experimental.md"/>
-        <toc-element topic="internal.md"/>
-    </toc-element>
-    <toc-element topic="code-design-pattern.md">
-        <toc-element toc-title="Creational">
-            <toc-element toc-title="Singleton">
-                <toc-element topic="Standard-Singleton.md"/>
-                <toc-element topic="Scoped-Singleton.md"/>
-                <toc-element topic="Resettable-Singleton.md"/>
-                <toc-element topic="Parameterized-Singleton.md"/>
-            </toc-element>
-            <toc-element toc-title="Factory">
-                <toc-element topic="Standard-Factory.md"/>
-                <toc-element topic="Async-Factory.md"/>
-                <toc-element topic="Standard-Parameterized.md"/>
-                <toc-element topic="Async-Parameterized.md"/>
-                <toc-element toc-title="Use Cases">
-                    <toc-element topic="Inheritance.md"/>
-                    <toc-element topic="Dynamic.md"/>
-                    <toc-element topic="Composition.md"/>
-                </toc-element>
-            </toc-element>
-        </toc-element>
-    </toc-element>
+    <toc-element topic="Overview.md"/>
+    <toc-element topic="Getting-Started.md"/>
+    <toc-element topic="Platform-Detection.md"/>
+    <toc-element topic="UUID-Utilities.md"/>
+    <toc-element topic="Common-Annotations.md"/>
+    <toc-element topic="Value-Providers.md"/>
+    <toc-element topic="JVM-Features.md"/>
 </instance-profile>
