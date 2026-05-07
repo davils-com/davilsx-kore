@@ -39,7 +39,8 @@ jobs:
 
       - name: Build with Gradle
         if: runner.os == 'Windows'
-        run: ./gradlew.bat build --no-daemon
+        shell: cmd
+        run: gradlew.bat build --no-daemon
 
   publish:
     if: github.ref_type == 'tag'
@@ -48,14 +49,32 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gradle: ./gradlew
-            tasks: publishKotlinMultiplatformPublicationToMavenCentral publishJvmPublicationToMavenCentral publishJsPublicationToMavenCentral publishWasmJsPublicationToMavenCentral publishAndroidPublicationToMavenCentral publishLinuxX64PublicationToMavenCentral publishLinuxArm64PublicationToMavenCentral
+            tasks: >
+              publishKotlinMultiplatformPublicationToMavenCentral
+              publishJvmPublicationToMavenCentral
+              publishJsPublicationToMavenCentral
+              publishWasmJsPublicationToMavenCentral
+              publishAndroidPublicationToMavenCentral
+              publishLinuxX64PublicationToMavenCentral
+              publishLinuxArm64PublicationToMavenCentral
+
           - os: macos-latest
-            gradle: ./gradlew
-            tasks: publishMacosArm64PublicationToMavenCentral publishIosX64PublicationToMavenCentral publishIosArm64PublicationToMavenCentral publishIosSimulatorArm64PublicationToMavenCentral publishTvosArm64PublicationToMavenCentral publishTvosSimulatorArm64PublicationToMavenCentral publishWatchosArm32PublicationToMavenCentral publishWatchosArm64PublicationToMavenCentral publishWatchosDeviceArm64PublicationToMavenCentral publishWatchosSimulatorArm64PublicationToMavenCentral
+            tasks: >
+              publishMacosArm64PublicationToMavenCentral
+              publishIosX64PublicationToMavenCentral
+              publishIosArm64PublicationToMavenCentral
+              publishIosSimulatorArm64PublicationToMavenCentral
+              publishTvosArm64PublicationToMavenCentral
+              publishTvosSimulatorArm64PublicationToMavenCentral
+              publishWatchosArm32PublicationToMavenCentral
+              publishWatchosArm64PublicationToMavenCentral
+              publishWatchosDeviceArm64PublicationToMavenCentral
+              publishWatchosSimulatorArm64PublicationToMavenCentral
+
           - os: windows-latest
-            gradle: ./gradlew.bat
-            tasks: publishMingwX64PublicationToMavenCentral
+            tasks: >
+              publishMingwX64PublicationToMavenCentral
+
     runs-on: ${{ matrix.os }}
 
     permissions:
@@ -84,5 +103,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Publish to Maven Central
-        shell: bash
-        run: ${{ matrix.gradle }} ${{ matrix.tasks }} --no-daemon
+        if: runner.os != 'Windows'
+        run: ./gradlew ${{ matrix.tasks }} --no-daemon
+
+      - name: Publish to Maven Central
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: gradlew.bat ${{ matrix.tasks }} --no-daemon
