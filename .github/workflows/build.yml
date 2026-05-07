@@ -108,5 +108,6 @@ jobs:
 
       - name: Publish to Maven Central
         if: runner.os == 'Windows'
-        shell: cmd
-        run: gradlew.bat ${{ matrix.tasks }}
+        shell: pwsh
+        run: |
+          gradlew.bat publishMingwX64PublicationToMavenCentral '--no-daemon'
