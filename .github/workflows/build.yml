@@ -49,7 +49,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            tasks: >
+            tasks: >-
               publishKotlinMultiplatformPublicationToMavenCentralRepository
               publishJvmPublicationToMavenCentralRepository
               publishJsPublicationToMavenCentralRepository
@@ -59,7 +59,7 @@ jobs:
               publishLinuxArm64PublicationToMavenCentralRepository
 
           - os: macos-latest
-            tasks: >
+            tasks: >-
               publishMacosArm64PublicationToMavenCentralRepository
               publishIosX64PublicationToMavenCentralRepository
               publishIosArm64PublicationToMavenCentralRepository
