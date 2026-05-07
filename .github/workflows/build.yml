@@ -109,4 +109,4 @@ jobs:
       - name: Publish to Maven Central
         if: runner.os == 'Windows'
         shell: cmd
-        run: gradlew.bat ${{ matrix.tasks }} --no-daemon
+        run: gradlew.bat ${{ matrix.tasks }}
