@@ -49,34 +49,13 @@ jobs:
         include:
           - os: ubuntu-latest
             gradle: ./gradlew
-            tasks: >
-              publishKotlinMultiplatformPublicationToMavenCentral
-              publishJvmPublicationToMavenCentral
-              publishJsPublicationToMavenCentral
-              publishWasmJsPublicationToMavenCentral
-              publishAndroidPublicationToMavenCentral
-              publishLinuxX64PublicationToMavenCentral
-              publishLinuxArm64PublicationToMavenCentral
-
+            tasks: publishKotlinMultiplatformPublicationToMavenCentral publishJvmPublicationToMavenCentral publishJsPublicationToMavenCentral publishWasmJsPublicationToMavenCentral publishAndroidPublicationToMavenCentral publishLinuxX64PublicationToMavenCentral publishLinuxArm64PublicationToMavenCentral
           - os: macos-latest
             gradle: ./gradlew
-            tasks: >
-              publishMacosArm64PublicationToMavenCentral
-              publishIosX64PublicationToMavenCentral
-              publishIosArm64PublicationToMavenCentral
-              publishIosSimulatorArm64PublicationToMavenCentral
-              publishTvosArm64PublicationToMavenCentral
-              publishTvosSimulatorArm64PublicationToMavenCentral
-              publishWatchosArm32PublicationToMavenCentral
-              publishWatchosArm64PublicationToMavenCentral
-              publishWatchosDeviceArm64PublicationToMavenCentral
-              publishWatchosSimulatorArm64PublicationToMavenCentral
-
+            tasks: publishMacosArm64PublicationToMavenCentral publishIosX64PublicationToMavenCentral publishIosArm64PublicationToMavenCentral publishIosSimulatorArm64PublicationToMavenCentral publishTvosArm64PublicationToMavenCentral publishTvosSimulatorArm64PublicationToMavenCentral publishWatchosArm32PublicationToMavenCentral publishWatchosArm64PublicationToMavenCentral publishWatchosDeviceArm64PublicationToMavenCentral publishWatchosSimulatorArm64PublicationToMavenCentral
           - os: windows-latest
             gradle: ./gradlew.bat
-            tasks: >
-              publishMingwX64PublicationToMavenCentral
-
+            tasks: publishMingwX64PublicationToMavenCentral
     runs-on: ${{ matrix.os }}
 
     permissions:
@@ -105,4 +84,5 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Publish to Maven Central
+        shell: bash
         run: ${{ matrix.gradle }} ${{ matrix.tasks }} --no-daemon
