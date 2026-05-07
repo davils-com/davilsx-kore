@@ -39,8 +39,8 @@ jobs:
 
       - name: Build with Gradle
         if: runner.os == 'Windows'
-        shell: cmd
-        run: gradlew.bat build --no-daemon
+        shell: pwsh
+        run: .\gradlew.bat build --no-daemon
 
   publish:
     if: github.ref_type == 'tag'
@@ -72,8 +72,7 @@ jobs:
               publishWatchosSimulatorArm64PublicationToMavenCentral
 
           - os: windows-latest
-            tasks: >
-              publishMingwX64PublicationToMavenCentral
+            task: publishMingwX64PublicationToMavenCentral
 
     runs-on: ${{ matrix.os }}
 
@@ -109,5 +108,4 @@ jobs:
       - name: Publish to Maven Central
         if: runner.os == 'Windows'
         shell: pwsh
-        run: |
-          gradlew.bat publishMingwX64PublicationToMavenCentral '--no-daemon'
+        run: .\gradlew.bat ${{ matrix.task }} --no-daemon
