@@ -24,7 +24,7 @@ plugins {
 kreate {
     project {
         publish {
-            enabled = false
+            enabled = true
             inceptionYear = Project.Identity.INCEPTION_YEAR
             website = Project.Organization.WEBSITE_URL
 

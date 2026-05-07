@@ -50,29 +50,29 @@ jobs:
         include:
           - os: ubuntu-latest
             tasks: >
-              publishKotlinMultiplatformPublicationToMavenCentral
-              publishJvmPublicationToMavenCentral
-              publishJsPublicationToMavenCentral
-              publishWasmJsPublicationToMavenCentral
-              publishAndroidPublicationToMavenCentral
-              publishLinuxX64PublicationToMavenCentral
-              publishLinuxArm64PublicationToMavenCentral
+              publishKotlinMultiplatformPublicationToMavenCentralRepository
+              publishJvmPublicationToMavenCentralRepository
+              publishJsPublicationToMavenCentralRepository
+              publishWasmJsPublicationToMavenCentralRepository
+              publishAndroidPublicationToMavenCentralRepository
+              publishLinuxX64PublicationToMavenCentralRepository
+              publishLinuxArm64PublicationToMavenCentralRepository
 
           - os: macos-latest
             tasks: >
-              publishMacosArm64PublicationToMavenCentral
-              publishIosX64PublicationToMavenCentral
-              publishIosArm64PublicationToMavenCentral
-              publishIosSimulatorArm64PublicationToMavenCentral
-              publishTvosArm64PublicationToMavenCentral
-              publishTvosSimulatorArm64PublicationToMavenCentral
-              publishWatchosArm32PublicationToMavenCentral
-              publishWatchosArm64PublicationToMavenCentral
-              publishWatchosDeviceArm64PublicationToMavenCentral
-              publishWatchosSimulatorArm64PublicationToMavenCentral
+              publishMacosArm64PublicationToMavenCentralRepository
+              publishIosX64PublicationToMavenCentralRepository
+              publishIosArm64PublicationToMavenCentralRepository
+              publishIosSimulatorArm64PublicationToMavenCentralRepository
+              publishTvosArm64PublicationToMavenCentralRepository
+              publishTvosSimulatorArm64PublicationToMavenCentralRepository
+              publishWatchosArm32PublicationToMavenCentralRepository
+              publishWatchosArm64PublicationToMavenCentralRepository
+              publishWatchosDeviceArm64PublicationToMavenCentralRepository
+              publishWatchosSimulatorArm64PublicationToMavenCentralRepository
 
           - os: windows-latest
-            task: publishMingwX64PublicationToMavenCentral
+            task: publishMingwX64PublicationToMavenCentralRepository
 
     runs-on: ${{ matrix.os }}
 
