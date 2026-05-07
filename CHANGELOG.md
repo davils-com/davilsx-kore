@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Platform Detection**: Type-safe detection for OS (Linux, macOS, Windows, Android, iOS, tvOS, watchOS) and environments (JVM, JS, Wasm).
+- **JVM Native Bridge**: Thread-safe management for loading native libraries via `NativeInterface`.
+- **System Properties DSL**: Advanced API and DSL for managing JVM system properties with `PropertiesScope`.
 - **UUID Utilities**: Full implementation for UUID Version 4 (random) and Version 7 (time-ordered) across all Kotlin targets.
 - **Common Annotations**: Ecosystem-wide annotations including `@KoreDsl`, `@InternalKoreApi`, and `@ExperimentalKoreApi`.
 - **Multiplatform Foundation**: Comprehensive target support including Mobile, Desktop, Web, and Native.
