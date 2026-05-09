@@ -42,7 +42,6 @@ import kotlin.time.Duration.Companion.milliseconds
  * and asynchronous event processing.
  *
  * @param E The base type of events handled by this bus. Must extend [EventMarker].
- * @param data The configuration data for the event bus.
  * @since 1.0.1
  */
 public class EventBus<E : EventMarker> internal constructor(private val data: EventBusData) {
