@@ -1,0 +1,100 @@
+/*
+ * Copyright 2026 Davils
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.davils.kore.event
+
+import com.davils.kore.annotation.KoreDsl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.plus
+
+/**
+ * Builder for creating and configuring an [EventBus].
+ *
+ * This class provides a DSL for setting up event bus parameters such as
+ * buffer capacity, replay behavior, and error handling.
+ *
+ * @param scope The parent [CoroutineScope] for the event bus.
+ * @since 1.0.1
+ */
+@KoreDsl
+public class EventBusBuilder internal constructor(private val scope: CoroutineScope) {
+    /**
+     * The number of events to replay to new subscribers.
+     *
+     * Must be non-negative. Defaults to 0.
+     *
+     * @throws IllegalArgumentException If the value is negative.
+     * @since 1.0.1
+     */
+    public var replay: Int = 0
+        set(value) {
+            require(value >= 0) { "Replay must be non-negative" }
+            field = value
+        }
+
+    /**
+     * The additional buffer capacity beyond the [replay] count.
+     *
+     * Must be non-negative. Defaults to 64.
+     *
+     * @throws IllegalArgumentException If the value is negative.
+     * @since 1.0.1
+     */
+    public var extraBufferCapacity: Int = 64
+        set(value) {
+            require(value >= 0) { "Extra buffer capacity must be non-negative" }
+            field = value
+        }
+
+    /**
+     * The strategy to apply when the event buffer is full.
+     *
+     * Defaults to [BufferOverflow.DROP_OLDEST].
+     *
+     * @since 1.0.1
+     */
+    public var overflowStrategy: BufferOverflow = BufferOverflow.DROP_OLDEST
+
+    /**
+     * The default error handler for exceptions thrown during event processing.
+     *
+     * This handler is invoked when a subscriber throws an exception and does
+     * not provide its own error handler.
+     *
+     * @since 1.0.1
+     */
+    public var onError: suspend (Throwable) -> Unit = {}
+
+
+    /**
+     * Builds the [EventBusData] instance based on the current configuration.
+     *
+     * @return A new [EventBusData] instance.
+     * @since 1.0.1
+     */
+    internal fun build(): EventBusData {
+        val coroutineScope = scope + SupervisorJob()
+        return EventBusData(
+            scope = coroutineScope,
+            replay = replay,
+            extraBufferCapacity = extraBufferCapacity,
+            overflowStrategy = overflowStrategy,
+            onError = onError
+        )
+    }
+}
