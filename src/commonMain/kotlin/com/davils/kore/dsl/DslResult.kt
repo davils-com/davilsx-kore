@@ -19,13 +19,22 @@ package com.davils.kore.dsl
 import com.davils.kore.annotation.KoreDsl
 
 /**
- * Base marker interface for all Domain Specific Language (DSL) components.
+ * Interface for Domain Specific Language (DSL) components that produce a [Result].
  *
- * This interface serves as a common root for DSL elements, allowing for
- * type-safe categorization and providing a foundation for DSL structure.
+ * This interface extends [DslMarker] and is intended for DSL builders where
+ * the production process might fail or requires validation, returning a [Result]
+ * encapsulating either the successfully produced object or an error.
  *
- * @param T The type of the object being built or represented by this DSL component.
+ * @param T The type of the object produced by this DSL component.
  * @since 1.0.1
  */
 @KoreDsl
-public interface DslMarker<out T>
+public interface DslResult<out T> : DslMarker<T> {
+    /**
+     * Produces and returns the result of the construction process.
+     *
+     * @return A [Result] containing the produced object of type [T] or a failure.
+     * @since 1.0.1
+     */
+    public fun produce(): Result<T>
+}
