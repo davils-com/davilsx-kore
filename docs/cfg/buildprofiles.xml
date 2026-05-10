@@ -26,6 +26,7 @@
         <download-page>https://davils-com.github.io/davilsx-kore/getting-started.html</download-page>
         <download-title>Getting Started</download-title>
         <header-logo>kore.svg</header-logo>
+        <custom-favicons>kore.svg</custom-favicons>
     </variables>
 
     <footer>

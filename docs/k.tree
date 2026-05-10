@@ -4,9 +4,11 @@
 
 <instance-profile id="k"
                  name="Kore"
-                 start-page="Overview.md">
+                 start-page="Welcome.topic">
 
+    <toc-element topic="Welcome.topic"/>
     <toc-element topic="Overview.md"/>
+    <toc-element toc-title="Annotation"/>
     <toc-element topic="Getting-Started.md"/>
     <toc-element topic="Platform-Detection.md"/>
     <toc-element topic="UUID-Utilities.md"/>

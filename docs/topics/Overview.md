@@ -1,5 +1,7 @@
 # Overview
 
+<primary-label ref="label"/>
+
 **Kore** is the fundamental core library of the DavilsX ecosystem. It provides essential utilities, abstractions, and standardizations for Kotlin Multiplatform (KMP) projects, ensuring consistency across different platforms and modules.
 
 ## Key Principles
