@@ -17,7 +17,7 @@
 package com.davils.kore.dsl.validation
 
 import com.davils.kore.annotation.KoreDsl
-import com.davils.kore.dsl.data.DslData
+import com.davils.kore.dsl.verification.DslVerifiableData
 
 /**
  * Base class for DSL components that provide validation for a specific data type.
@@ -25,11 +25,11 @@ import com.davils.kore.dsl.data.DslData
  * This class defines the core contract for validators within the DSL ecosystem,
  * ensuring that components can provide access to the data they are validating.
  *
- * @param T The type of [DslData] that this validator handles.
+ * @param T The type of [DslVerifiableData] that this validator handles.
  * @since 1.0.0
  */
 @KoreDsl
-public abstract class Validator<out T : DslData> {
+public abstract class Validator<out T : DslVerifiableData> {
     /**
      * Returns the data object associated with this validator.
      *
