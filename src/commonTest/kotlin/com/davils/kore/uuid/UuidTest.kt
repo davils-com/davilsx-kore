@@ -17,54 +17,80 @@
 package com.davils.kore.uuid
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 class UuidTest : FunSpec({
-    context("Base functionality") {
-        test("equality and hashCode") {
-            val raw = "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-            val uuid1 = UuidV4(raw)
-            val uuid2 = UuidV4(raw)
-            val uuid3 = UuidV4()
 
-            uuid1 shouldBe uuid2
-            uuid1.hashCode() shouldBe uuid2.hashCode()
-            uuid1 shouldNotBe uuid3
+    context("Uuid base behavior") {
+        test("compares values lexicographically") {
+            val smaller = object : Uuid() {
+                override val value: String = "a"
+                override fun validate() {}
+            }
+            val larger = object : Uuid() {
+                override val value: String = "b"
+                override fun validate() {}
+            }
+
+            (smaller < larger).shouldBeTrue()
+            (larger > smaller).shouldBeTrue()
+            (smaller.compareTo(larger) shouldBe -1)
         }
 
-        test("comparison") {
-            val uuid1 = UuidV4("00000000-0000-4000-8000-000000000000")
-            val uuid2 = UuidV4("ffffffff-ffff-4fff-bfff-ffffffffffff")
+        test("equals uses value equality") {
+            val first = object : Uuid() {
+                override val value: String = "same"
+                override fun validate() {}
+            }
+            val second = object : Uuid() {
+                override val value: String = "same"
+                override fun validate() {}
+            }
+            val different = object : Uuid() {
+                override val value: String = "different"
+                override fun validate() {}
+            }
 
-            (uuid1 < uuid2) shouldBe true
-            (uuid2 > uuid1) shouldBe true
+            first shouldBe second
+            first.shouldNotBe(different)
+            first.hashCode() shouldBe second.hashCode()
         }
 
-        test("toString") {
-            val uuid = UuidV4()
-            uuid.toString() shouldBe uuid.value
+        test("toString returns value") {
+            val uuid = object : Uuid() {
+                override val value: String = "test-value"
+                override fun validate() {}
+            }
+
+            uuid.toString() shouldBe "test-value"
+        }
+
+        test("property delegation returns value") {
+            val uuid = object : Uuid() {
+                override val value: String = "delegated-value"
+                override fun validate() {}
+            }
+
+            val delegated: String by uuid
+            delegated shouldBe "delegated-value"
         }
     }
 
-    context("Property delegation") {
-        test("should delegate correctly") {
-            val uuid = UuidV4()
-            val delegateValue: String by uuid
-            delegateValue shouldBe uuid.value
-        }
-    }
-
-    context("Companion factory methods") {
-        test("randomUuidV4() should return UuidV4 instance") {
+    context("Factory methods") {
+        test("randomUuidV4 returns a valid UUID v4") {
             val uuid = Uuid.randomUuidV4()
-            uuid.shouldBeInstanceOf<UuidV4>()
+
+            UuidV4.isValid(uuid.value).shouldBeTrue()
+            uuid.value[14] shouldBe '4'
         }
 
-        test("randomUuidV7() should return UuidV7 instance") {
+        test("randomUuidV7 returns a valid UUID v7") {
             val uuid = Uuid.randomUuidV7()
-            uuid.shouldBeInstanceOf<UuidV7>()
+
+            UuidV7.isValid(uuid.value).shouldBeTrue()
+            uuid.value[14] shouldBe '7'
         }
     }
 })

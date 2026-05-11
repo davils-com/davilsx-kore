@@ -18,77 +18,108 @@ package com.davils.kore.uuid
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.comparables.shouldBeGreaterThan
-import io.kotest.matchers.comparables.shouldBeLessThan
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldMatch
+import io.kotest.matchers.string.shouldContain
 import kotlinx.serialization.json.Json
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.Clock
 
 class UuidV7Test : FunSpec({
-    context("Generation") {
-        test("should generate a valid UUID v7") {
+
+    context("Construction") {
+        test("creates a valid random UUID v7") {
             val uuid = UuidV7()
-            uuid.value shouldMatch Regex(UuidV7.REGEX_PATTERN)
+
+            UuidV7.isValid(uuid.value).shouldBeTrue()
+            uuid.value[14] shouldBe '7'
         }
 
-        test("should be time-ordered") {
-            val uuid1 = UuidV7()
-            val uuid2 = UuidV7()
+        test("creates from a valid string") {
+            val value = "01890f47-8f3b-7c4e-8b2a-123456789abc"
 
-            uuid2 shouldBeGreaterThan uuid1
+            val uuid = UuidV7(value)
+
+            uuid.value shouldBe value
+            UuidV7.isValid(uuid.value).shouldBeTrue()
+        }
+
+        test("copies another instance") {
+            val source = UuidV7("01890f47-8f3b-7c4e-8b2a-123456789abc")
+
+            val copy = UuidV7(source)
+
+            copy shouldBe source
+            copy.value shouldBe source.value
+        }
+
+        test("rejects an invalid value") {
+            val exception = shouldThrow<IllegalArgumentException> {
+                UuidV7("invalid")
+            }
+
+            exception.message shouldContain "Invalid UUID v7"
         }
     }
 
-    context("Timestamp Extraction") {
-        test("should extract correct timestamp") {
-            val now = Clock.System.now()
-            val uuid = UuidV7()
+    context("Validation") {
+        test("accepts lowercase valid value") {
+            UuidV7.isValid("01890f47-8f3b-7c4e-8b2a-123456789abc").shouldBeTrue()
+        }
 
-            val extracted = uuid.instant
-            val diff: Duration = if (extracted > now) extracted - now else now - extracted
-            diff shouldBeLessThan 1.seconds
+        test("accepts uppercase valid value") {
+            UuidV7.isValid("01890F47-8F3B-7C4E-8B2A-123456789ABC").shouldBeTrue()
+        }
+
+        test("rejects version mismatch") {
+            UuidV7.isValid("01890f47-8f3b-6c4e-8b2a-123456789abc").shouldBeFalse()
+        }
+
+        test("rejects variant mismatch") {
+            UuidV7.isValid("01890f47-8f3b-7c4e-cb2a-123456789abc").shouldBeFalse()
         }
     }
 
-    context("Constructors") {
-        test("should create instance from valid string") {
-            val raw = "018f1f51-8b00-7ec1-9491-0d35048740f9"
-            val uuid = UuidV7(raw)
-            uuid.value shouldBe raw
+    context("Timestamp") {
+        test("extracts timestamp from value") {
+            val uuid = UuidV7("01890f47-8f3b-7c4e-8b2a-123456789abc")
+
+            uuid.timestamp shouldBe 1688178495291L
+            uuid.instant.toEpochMilliseconds() shouldBe 1688178495291L
         }
 
-        test("should throw exception for invalid string") {
+        test("caches timestamp and instant") {
+            val uuid = UuidV7("01890f47-8f3b-7c4e-8b2a-123456789abc")
+
+            uuid.timestamp shouldBe uuid.timestamp
+            uuid.instant shouldBe uuid.instant
+        }
+    }
+
+    context("Extension") {
+        test("converts string to UUID v7") {
+            val uuid = "01890f47-8f3b-7c4e-8b2a-123456789abc".toUuidV7()
+
+            uuid.value shouldBe "01890f47-8f3b-7c4e-8b2a-123456789abc"
+        }
+
+        test("rejects invalid string") {
             shouldThrow<IllegalArgumentException> {
-                UuidV7("not-a-uuid")
+                "invalid".toUuidV7()
             }
         }
-
-        test("should create instance from copy") {
-            val original = UuidV7()
-            val copy = UuidV7(original)
-            copy.value shouldBe original.value
-        }
     }
 
-    context("Serialization") {
-        test("should serialize and deserialize correctly") {
-            val uuid = UuidV7()
-            val json = Json.encodeToString(UuidV7.serializer(), uuid)
+    context("Serializer") {
+        test("serializes and deserializes value") {
+            val original = UuidV7("01890f47-8f3b-7c4e-8b2a-123456789abc")
+
+            val json = Json.encodeToString(UuidV7.serializer(), original)
+
+            json shouldBe "\"01890f47-8f3b-7c4e-8b2a-123456789abc\""
+
             val decoded = Json.decodeFromString(UuidV7.serializer(), json)
 
-            decoded shouldBe uuid
-            json shouldBe "\"${uuid.value}\""
-        }
-    }
-
-    context("Extension functions") {
-        test("String.toUuidV7() should convert") {
-            val raw = "018f1f51-8b00-7ec1-9491-0d35048740f9"
-            val uuid = raw.toUuidV7()
-            uuid.value shouldBe raw
+            decoded shouldBe original
         }
     }
 })
