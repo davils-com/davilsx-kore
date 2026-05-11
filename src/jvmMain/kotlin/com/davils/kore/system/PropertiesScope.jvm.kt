@@ -194,6 +194,15 @@ public class PropertiesScope internal constructor() : ValueProvider<String> {
 }
 
 /**
+ * Provides a convenient way to access JVM system properties through a [PropertiesScope].
+ * This property can be used directly to access system properties without any DSL.
+ *
+ * @since 1.0.0
+ */
+public val props: PropertiesScope
+    get() = PropertiesScope()
+
+/**
  * Creates a new [PropertiesScope] instance.
  *
  * @return A new instance of [PropertiesScope].
