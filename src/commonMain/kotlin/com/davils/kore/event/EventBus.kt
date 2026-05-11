@@ -273,6 +273,6 @@ public class EventBus<E : EventMarker> internal constructor(private val data: Ev
 public fun <E : EventMarker> eventBus(scope: CoroutineScope, builder: EventBusBuilder.() -> Unit = {}): EventBus<E> {
     val eventBusBuilder = EventBusBuilder(scope)
     eventBusBuilder.builder()
-    val data = eventBusBuilder.build()
+    val data = eventBusBuilder.produce()
     return EventBus(data)
 }

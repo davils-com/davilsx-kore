@@ -17,6 +17,7 @@
 package com.davils.kore.event
 
 import com.davils.kore.annotation.KoreDsl
+import com.davils.kore.dsl.validation.DslValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
@@ -32,7 +33,7 @@ import kotlinx.coroutines.plus
  * @since 1.0.1
  */
 @KoreDsl
-public class EventBusBuilder internal constructor(private val scope: CoroutineScope) {
+public class EventBusBuilder internal constructor(private val scope: CoroutineScope) : DslValidator<EventBusData>() {
     /**
      * The number of events to replay to new subscribers.
      *
@@ -42,10 +43,6 @@ public class EventBusBuilder internal constructor(private val scope: CoroutineSc
      * @since 1.0.1
      */
     public var replay: Int = 0
-        set(value) {
-            require(value >= 0) { "Replay must be non-negative" }
-            field = value
-        }
 
     /**
      * The additional buffer capacity beyond the [replay] count.
@@ -56,10 +53,6 @@ public class EventBusBuilder internal constructor(private val scope: CoroutineSc
      * @since 1.0.1
      */
     public var extraBufferCapacity: Int = 64
-        set(value) {
-            require(value >= 0) { "Extra buffer capacity must be non-negative" }
-            field = value
-        }
 
     /**
      * The strategy to apply when the event buffer is full.
@@ -80,17 +73,10 @@ public class EventBusBuilder internal constructor(private val scope: CoroutineSc
      */
     public var onError: suspend (Throwable) -> Unit = {}
 
-
-    /**
-     * Builds the [EventBusData] instance based on the current configuration.
-     *
-     * @return A new [EventBusData] instance.
-     * @since 1.0.1
-     */
-    internal fun build(): EventBusData {
-        val coroutineScope = scope + SupervisorJob()
+    override fun data(): EventBusData {
+        val scope = scope + SupervisorJob()
         return EventBusData(
-            scope = coroutineScope,
+            scope = scope,
             replay = replay,
             extraBufferCapacity = extraBufferCapacity,
             overflowStrategy = overflowStrategy,

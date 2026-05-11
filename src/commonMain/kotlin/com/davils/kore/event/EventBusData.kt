@@ -16,6 +16,9 @@
 
 package com.davils.kore.event
 
+import com.davils.kore.dsl.verification.DslVerifiableData
+import com.davils.kore.dsl.verification.DslVerification
+import com.davils.kore.dsl.verification.verifyDsl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 
@@ -63,4 +66,10 @@ public data class EventBusData internal constructor(
      * @since 1.0.1
      */
     val onError: suspend (Throwable) -> Unit
-)
+) : DslVerifiableData {
+    override fun validate(): DslVerification = verifyDsl {
+        if (replay < 0) fail("Replay must be non-negative", field = "replay")
+        if (extraBufferCapacity < 0) fail("Extra buffer capacity must be non-negative", field = "extraBufferCapacity")
+    }
+}
+
