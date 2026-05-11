@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.davils.kore.system.environment
+package com.davils.kore.environment
 
+import com.davils.kore.system.environment.Environment
+import com.davils.kore.system.platform.Platform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-class EnvironmentTestTvosArm64 : FunSpec({
+class EnvironmentTest : FunSpec({
     context("Environment") {
-        test("isSupported should be true") {
+        test("isSupported should be true and false on web targets") {
+            if (Platform.isWeb) {
+                Environment.isSupported shouldBe false
+                return@test
+            }
+
             Environment.isSupported shouldBe true
         }
 
@@ -30,7 +37,12 @@ class EnvironmentTestTvosArm64 : FunSpec({
             Environment.getOrNull("NON_EXISTENT_KEY") shouldBe null
         }
 
-        test("get should return correct value for existing keys") {
+        test("get should return correct value for existing keys and null on web targets") {
+            if (Platform.isWeb) {
+                Environment.getOrNull("PATH") shouldBe null
+                return@test
+            }
+
             Environment.getOrNull("PATH") shouldNotBe null
         }
     }
