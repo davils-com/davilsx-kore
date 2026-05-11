@@ -29,7 +29,6 @@ import kotlinx.coroutines.plus
  * This class provides a DSL for setting up event bus parameters such as
  * buffer capacity, replay behavior, and error handling.
  *
- * @param scope The parent [CoroutineScope] for the event bus.
  * @since 1.0.1
  */
 @KoreDsl
@@ -39,7 +38,6 @@ public class EventBusBuilder internal constructor(private val scope: CoroutineSc
      *
      * Must be non-negative. Defaults to 0.
      *
-     * @throws IllegalArgumentException If the value is negative.
      * @since 1.0.1
      */
     public var replay: Int = 0
@@ -49,7 +47,6 @@ public class EventBusBuilder internal constructor(private val scope: CoroutineSc
      *
      * Must be non-negative. Defaults to 64.
      *
-     * @throws IllegalArgumentException If the value is negative.
      * @since 1.0.1
      */
     public var extraBufferCapacity: Int = 64
