@@ -11,7 +11,7 @@ android = "9.1.1"
 datetime = "0.8.0"
 serialization = "1.11.0"
 atomicfu = "0.32.1"
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 
 [libraries]
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
