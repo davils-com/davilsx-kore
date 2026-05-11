@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davils.kore.event
+package com.davils.kore.pattern.event
 
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope

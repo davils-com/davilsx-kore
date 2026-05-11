@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davils.kore.event
+package com.davils.kore.pattern.event
 
 import com.davils.kore.uuid.UuidV7
 import kotlin.time.Instant

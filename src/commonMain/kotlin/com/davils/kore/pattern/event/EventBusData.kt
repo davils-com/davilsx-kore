@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.davils.kore.event
+package com.davils.kore.pattern.event
 
-import com.davils.kore.dsl.verification.DslVerifiableData
-import com.davils.kore.dsl.verification.DslVerification
-import com.davils.kore.dsl.verification.verifyDsl
+import com.davils.kore.pattern.dsl.verification.DslVerifiableData
+import com.davils.kore.pattern.dsl.verification.DslVerification
+import com.davils.kore.pattern.dsl.verification.verifyDsl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 

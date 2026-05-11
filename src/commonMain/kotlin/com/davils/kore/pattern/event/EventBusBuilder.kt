@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.davils.kore.event
+package com.davils.kore.pattern.event
 
 import com.davils.kore.annotation.KoreDsl
-import com.davils.kore.dsl.validation.DslValidator
+import com.davils.kore.pattern.dsl.validation.DslValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
