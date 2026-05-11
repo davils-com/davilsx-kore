@@ -19,7 +19,7 @@ package com.davils.kore.system.platform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DetectorTestJvm : FunSpec({
+class OsDetectorTestJvm : FunSpec({
 
     test("isJvm should be true on JVM") {
         OsDetector.isJvm shouldBe true

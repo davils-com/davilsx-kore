@@ -19,12 +19,12 @@ package com.davils.kore.system.platform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DetectorTestMacosArm64 : FunSpec({
+class OsDetectorTestIosArm64 : FunSpec({
     test("isJvm should false") {
         OsDetector.isJvm shouldBe false
     }
 
-    test("os should be MACOS") {
-        OsDetector.os shouldBe Os.MACOS
+    test("os should be IOS") {
+        OsDetector.os shouldBe Os.IOS
     }
 })

@@ -19,7 +19,7 @@ package com.davils.kore.system.platform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DetectorTestIosArm64 : FunSpec({
+class OsDetectorTestIosX64 : FunSpec({
     test("isJvm should false") {
         OsDetector.isJvm shouldBe false
     }

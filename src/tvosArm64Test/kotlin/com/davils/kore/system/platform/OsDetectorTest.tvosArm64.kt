@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
+@file:Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+
 package com.davils.kore.system.platform
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DetectorTestWasm : FunSpec({
+class OsDetectorTestTvosArm64 : FunSpec({
     test("isJvm should false") {
         OsDetector.isJvm shouldBe false
     }
 
-    test("os should be WASM") {
-        OsDetector.os shouldBe Os.WASM
+    test("os should be TVOS") {
+        OsDetector.os shouldBe Os.TVOS
     }
 })

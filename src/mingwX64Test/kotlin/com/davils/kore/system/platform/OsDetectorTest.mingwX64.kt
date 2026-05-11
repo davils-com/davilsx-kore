@@ -19,12 +19,12 @@ package com.davils.kore.system.platform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DetectorTestWatchosSimulatorArm64 : FunSpec({
+class OsDetectorTestMingwX64 : FunSpec({
     test("isJvm should false") {
         OsDetector.isJvm shouldBe false
     }
 
-    test("os should be WATCHOS") {
-        OsDetector.os shouldBe Os.WATCHOS
+    test("os should be WINDOWS") {
+        OsDetector.os shouldBe Os.WINDOWS
     }
 })
