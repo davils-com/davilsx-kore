@@ -7,51 +7,28 @@
     <section-starting-page>
         <title>Kore Documentation</title>
         <description>
-            Kore is the foundational Kotlin Multiplatform library of the Davils ecosystem, providing essential
-            utilities and core building blocks for developing scalable
-            cross-platform applications with consistency and ease.
+            Kore is the base Kotlin Multiplatform library of the Davils ecosystem, providing essential
+            tools for building scalable and consistent cross-platform applications and libraries.
         </description>
 
         <spotlight>
-            <card href="Topic1.topic" badge="start"
-                  summary="Sed condimentum feugiat sagittis"/>
-            <card href="Topic2.topic" badge="search"
-                  summary="Sed condimentum feugiat sagittis"/>
+            <card href="Getting-Started.md" badge="start"
+                  summary="Create beautiful projects with ease. Let's get started!"/>
+            <card href="Changelog.md" badge="search" summary="See what's new in the latest version"/>
             ...
         </spotlight>
 
-        <primary>
-            <title>Main group</title>
-            <card href="Topic.topic"
-                  summary="Sed condimentum feugiat sagittis"/>
-            ...
-        </primary>
-
         <secondary>
-            <title>Highlighted group</title>
-            <card href="Topic.topic"
-                  summary="Sed condimentum feugiat sagittis"/>
-            ...
+            <title>Take a first look</title>
+            <card href="Overview.md" badge="documents" summary="Understand the Kore architecture and their features"/>
         </secondary>
+
 
         <misc>
             <cards>
-                <title>Custom cards</title>
-                <card href="Topic.topic"
-                      summary="Sed condimentum feugiat sagittis"/>
-                ...
+                <title>Featured topics</title>
+                <card href="Annotation-Introduction.md" summary="Annotations"/>
             </cards>
-
-            <links narrow="true">
-                <group>
-                    <title>Custom links</title>
-                    <a href="Topic.topic"
-                       summary="Sed condimentum feugiat sagittis"/>
-                    ...
-                </group>
-                ...
-            </links>
         </misc>
     </section-starting-page>
-
 </topic>

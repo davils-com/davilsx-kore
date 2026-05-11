@@ -1,4 +1,4 @@
-# Value Providers
+# Value Provider
 
 The `ValueProvider` interface is a generic abstraction used across Kore and the DavilsX ecosystem for retrieving values by key. It provides a consistent way to access configuration values, environment variables, or any other key-value based data.
 
@@ -36,14 +36,14 @@ if ("my.key" in provider) {
 
 Kore provides several implementations of `ValueProvider`:
 
-### Environment
+### Environment Variables
 
-The `Environment` object implements `ValueProvider<String>`, providing access to system environment variables across platforms.
+The `EnvironmentScope` used by `env` and `environment { }` implements `ValueProvider<String>`, providing access to system environment variables.
 
 ```kotlin
-import com.davils.kore.system.Environment
+import com.davils.kore.system.environment.env
 
-val path = Environment["PATH"]
+val path = env["PATH"]
 ```
 
 ### PropertiesScope (JVM)
@@ -67,3 +67,9 @@ class MyConfigProvider(private val config: Map<String, String>) : ValueProvider<
     override fun getValueOrNull(key: String): String? = config[key]
 }
 ```
+
+## See Also
+
+- [Environment Variables](System-Environment.md)
+- [System Properties](System-Properties.md)
+- [Platform Detection](platform/System-Platform-Detection.md)

@@ -18,8 +18,8 @@
 <!DOCTYPE labels SYSTEM "https://resources.jetbrains.com/writerside/1.0/labels-list.dtd">
 <labels xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/labels.xsd">
-    <primary-label id="label" short-name="L" name="Label">
-        This is an example label
+    <primary-label id="annotation" short-name="A" name="Annotation" color="blue">
+        Kore annotation system
     </primary-label>
 
     <primary-label id="jetbrains" short-name="JB" name="JetBrains" href="https://www.jetbrains.com" color="red">
