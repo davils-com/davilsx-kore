@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.davils.kore.dsl
-
-import com.davils.kore.annotation.KoreDsl
+package com.davils.kore.pattern.dsl.verification
 
 /**
- * Base marker interface for all Domain Specific Language (DSL) components.
+ * Represents the raw data container for DSL verification results.
  *
- * This interface serves as a common root for DSL elements, allowing for
- * type-safe categorization and providing a foundation for DSL structure.
+ * This data class holds a list of [DslVerificationFailure] objects that
+ * occurred during the verification process.
  *
- * @param T The type of the object being built or represented by this DSL component.
- * @since 1.0.1
+ * @since 1.0.0
  */
-@KoreDsl
-public interface DslMarker<out T>
+@ConsistentCopyVisibility
+public data class DslVerificationData internal constructor(
+    /**
+     * The list of failures encountered during verification.
+     *
+     * @since 1.0.0
+     */
+    public val failures: List<DslVerificationFailure>
+)

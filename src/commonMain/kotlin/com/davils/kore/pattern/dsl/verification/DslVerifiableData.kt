@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package com.davils.kore.dsl.verification
+package com.davils.kore.pattern.dsl.verification
 
 /**
- * Represents the raw data container for DSL verification results.
+ * An interface for data classes that can be verified within the DSL.
  *
- * This data class holds a list of [DslVerificationFailure] objects that
- * occurred during the verification process.
+ * Classes implementing this interface must provide a [validate] method that
+ * returns a [DslVerification] object containing any validation failures.
  *
  * @since 1.0.0
  */
-@ConsistentCopyVisibility
-public data class DslVerificationData internal constructor(
+public interface DslVerifiableData {
     /**
-     * The list of failures encountered during verification.
+     * Validates the data and returns the verification results.
      *
+     * @return A [DslVerification] instance containing the validation results.
      * @since 1.0.0
      */
-    public val failures: List<DslVerificationFailure>
-)
+    public fun validate(): DslVerification
+}

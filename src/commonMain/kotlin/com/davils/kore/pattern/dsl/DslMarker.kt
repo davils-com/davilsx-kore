@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.davils.kore.dsl.verification
+package com.davils.kore.pattern.dsl
+
+import com.davils.kore.annotation.KoreDsl
 
 /**
- * An interface for data classes that can be verified within the DSL.
+ * Base marker interface for all Domain Specific Language (DSL) components.
  *
- * Classes implementing this interface must provide a [validate] method that
- * returns a [DslVerification] object containing any validation failures.
+ * This interface serves as a common root for DSL elements, allowing for
+ * type-safe categorization and providing a foundation for DSL structure.
  *
- * @since 1.0.0
+ * @param T The type of the object being built or represented by this DSL component.
+ * @since 1.0.1
  */
-public interface DslVerifiableData {
-    /**
-     * Validates the data and returns the verification results.
-     *
-     * @return A [DslVerification] instance containing the validation results.
-     * @since 1.0.0
-     */
-    public fun validate(): DslVerification
-}
+@KoreDsl
+public interface DslMarker<out T>
