@@ -8,18 +8,29 @@ publish = "0.36.0"
 detekt = "2.0.0-alpha.3"
 android = "9.1.1"
 
+# kotlin
 datetime = "0.8.0"
 serialization = "1.11.0"
 atomicfu = "0.32.1"
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 
 [libraries]
-kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+# datetime
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+# atomic
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 
+# serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+# coroutines
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "coroutines" }
+
+# testing
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
@@ -37,22 +48,28 @@ android-kotlin-library = { module = "com.android.kotlin.multiplatform.library:co
 [bundles]
 kore-common-api = [
     "kotlinx-datetime",
+    "kotlinx-coroutines-core",
 ]
 
 kore-common-impl = [
     "kotlinx-serialization-json",
-    "kotlinx-atomicfu",
-    "kotlinx-coroutines-core"
+    "kotlinx-atomicfu"
+]
+
+kore-jvm-api = [
+    "kotlinx-coroutines-reactive"
 ]
 
 kore-tests-common-impl = [
     "kotest-framework-engine",
     "kotest-assertions-core",
-    "kotest-property"
+    "kotest-property",
+    "kotlinx-coroutines-test"
 ]
 
 kore-tests-jvm-impl = [
-    "kotest-runner-junit5"
+    "kotest-runner-junit5",
+    "kotlinx-coroutines-debug"
 ]
 
 build-src = [

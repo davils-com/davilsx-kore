@@ -28,6 +28,12 @@ kotlin {
             }
         }
 
+        jvmMain {
+            dependencies {
+                api(libs.bundles.kore.jvm.api)
+            }
+        }
+
         jvmTest {
             dependencies {
                 implementation(libs.bundles.kore.tests.jvm.impl)
