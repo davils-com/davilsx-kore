@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davils.kore.environment
+package com.davils.kore.system.environment
 
 import com.davils.kore.system.environment.Environment
 import com.davils.kore.system.platform.Platform
