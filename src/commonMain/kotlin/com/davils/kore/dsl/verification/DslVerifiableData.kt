@@ -16,6 +16,20 @@
 
 package com.davils.kore.dsl.verification
 
+/**
+ * An interface for data classes that can be verified within the DSL.
+ *
+ * Classes implementing this interface must provide a [validate] method that
+ * returns a [DslVerification] object containing any validation failures.
+ *
+ * @since 1.0.0
+ */
 public interface DslVerifiableData {
+    /**
+     * Validates the data and returns the verification results.
+     *
+     * @return A [DslVerification] instance containing the validation results.
+     * @since 1.0.0
+     */
     public fun validate(): DslVerification
 }

@@ -21,13 +21,44 @@ import com.davils.kore.dsl.Dsl
 import com.davils.kore.dsl.verification.DslVerifiableData
 import com.davils.kore.dsl.verification.DslVerificationException
 
+/**
+ * A base class for DSL components that produce validated data.
+ *
+ * This class combines the functionality of a [Validator] and a [Dsl] component.
+ * It ensures that the data produced by the DSL is automatically validated
+ * before being returned.
+ *
+ * @param D The type of [DslVerifiableData] that this validator produces and validates.
+ * @since 1.0.0
+ */
 @KoreDsl
 public abstract class DslValidator<out D : DslVerifiableData> : Validator<D>(), Dsl<D> {
+    /**
+     * Produces the validated data object.
+     *
+     * This method retrieves the data from the [data] method and performs
+     * validation. If the validation fails, a [DslVerificationException] is thrown.
+     *
+     * @return The validated data object of type [D].
+     * @throws DslVerificationException If the data validation fails.
+     * @since 1.0.0
+     */
     override fun produce(): D {
         val data = data()
         return validateData(data)
     }
 
+    /**
+     * Validates the provided data object.
+     *
+     * This internal method checks the validity of the data using its [DslVerifiableData.validate]
+     * method.
+     *
+     * @param data The data object to validate.
+     * @return The validated data object.
+     * @throws DslVerificationException If the validation fails.
+     * @since 1.0.0
+     */
     private fun validateData(data: D): D {
         val validator = data.validate()
         if (!validator.isValid) {

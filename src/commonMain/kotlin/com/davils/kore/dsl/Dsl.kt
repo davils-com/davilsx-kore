@@ -19,7 +19,7 @@ package com.davils.kore.dsl
 import com.davils.kore.annotation.KoreDsl
 
 /**
- * Interface for Domain Specific Language (DSL) components that produce a result.
+ * Interface for Domain-Specific Language (DSL) components that produce a result.
  *
  * This interface extends [DslMarker] and defines the standard contract for DSL
  * builders that can directly instantiate or produce an object of type [T].

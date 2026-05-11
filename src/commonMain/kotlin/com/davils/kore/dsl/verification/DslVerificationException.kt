@@ -16,7 +16,20 @@
 
 package com.davils.kore.dsl.verification
 
+/**
+ * Exception thrown when DSL verification fails.
+ *
+ * This exception encapsulates a list of [DslVerificationFailure] objects and
+ * provides a formatted error message detailing each failure.
+ *
+ * @since 1.0.0
+ */
 public class DslVerificationException(
+    /**
+     * The list of failures that caused this exception.
+     *
+     * @since 1.0.0
+     */
     public val failures: List<DslVerificationFailure>
 ) : Exception(
     buildString {

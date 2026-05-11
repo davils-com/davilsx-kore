@@ -33,6 +33,9 @@ public abstract class Validator<out T : DslVerifiableData> {
     /**
      * Returns the data object associated with this validator.
      *
+     * This method must be implemented by subclasses to provide the actual data
+     * instance that will be validated.
+     *
      * @return The data object of type [T].
      * @since 1.0.0
      */

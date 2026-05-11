@@ -19,30 +19,77 @@ package com.davils.kore.dsl.verification
 import com.davils.kore.annotation.KoreDsl
 import com.davils.kore.dsl.Dsl
 
+/**
+ * A builder class for collecting DSL verification failures.
+ *
+ * This class implements the [Dsl] interface and provides various methods to
+ * record verification failures, either individually or in groups.
+ *
+ * @since 1.0.0
+ */
 @KoreDsl
 public class DslVerificationBuilder internal constructor() : Dsl<DslVerificationData> {
     private val failures: MutableList<DslVerificationFailure> = mutableListOf()
 
+    /**
+     * Records a new verification failure with a message and an optional field.
+     *
+     * @param message A descriptive message explaining the failure.
+     * @param field The name of the field that failed verification (optional).
+     * @since 1.0.0
+     */
     public fun fail(message: String, field: String? = null) {
         failures.add(DslVerificationFailure(message, field))
     }
 
+    /**
+     * Records a specific [DslVerificationFailure].
+     *
+     * @param failure The failure object to record.
+     * @since 1.0.0
+     */
     public fun fail(failure: DslVerificationFailure) {
         failures.add(failure)
     }
 
+    /**
+     * Records all failures from an [Iterable] collection.
+     *
+     * @param failures An [Iterable] of failures to record.
+     * @since 1.0.0
+     */
     public fun failAll(failures: Iterable<DslVerificationFailure>) {
         this.failures.addAll(failures)
     }
 
+    /**
+     * Records all provided failures.
+     *
+     * @param failures One or more failure objects to record.
+     * @since 1.0.0
+     */
     public fun failAll(vararg failures: DslVerificationFailure) {
         this.failures.addAll(failures)
     }
 
+    /**
+     * Extension operator to record a failure using the unary plus operator.
+     *
+     * This allows adding a failure with the syntax `+DslVerificationFailure(...)`.
+     *
+     * @receiver The [DslVerificationFailure] to record.
+     * @since 1.0.0
+     */
     public operator fun DslVerificationFailure.unaryPlus() {
         fail(this)
     }
 
+    /**
+     * Produces the [DslVerificationData] containing all recorded failures.
+     *
+     * @return A [DslVerificationData] instance with the collected failures.
+     * @since 1.0.0
+     */
     override fun produce(): DslVerificationData {
         return DslVerificationData(failures)
     }
