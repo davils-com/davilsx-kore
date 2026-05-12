@@ -30,11 +30,11 @@
             Some advanced features may be <b>JVM/Android-only</b> due to platform <b>limitations</b>.
         </warning>
 
-        <table frame="all">
+        <table>
             <tr>
-                <th>Platform</th>
-                <th>Targets</th>
-                <th>Status</th>
+                <td><b>Platform</b></td>
+                <td><b>Targets</b></td>
+                <td><b>Status</b></td>
             </tr>
             <tr>
                 <td rowspan="2">JVM</td>
