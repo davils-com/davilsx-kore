@@ -16,7 +16,7 @@
 
 @file:Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 
-package com.davils.kore.system
+package com.davils.kore.system.environment
 
 /**
  * Provides access to system environment variables.
