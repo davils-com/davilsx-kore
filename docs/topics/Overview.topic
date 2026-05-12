@@ -1,0 +1,207 @@
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Overview"
+       id="Overview">
+
+    <primary-label ref="onboard"/>
+
+    <p>
+        <b>Kore</b> is the foundational core library of the DavilsX ecosystem.
+        It exists to answer a question that every Kotlin Multiplatform project eventually runs into:
+        <emphasis>where do I put the things that every module needs?</emphasis>
+    </p>
+
+    <p>
+        As DavilsX grew from a single module into a multi-target ecosystem spanning mobile, desktop, web, and embedded platforms,
+        the need for a single, authoritative foundation became unavoidable.
+        Kore was created to be that foundation — stable, minimal, and consistent regardless of which Kotlin target your code runs on.
+    </p>
+
+    <chapter title="The Problem Kore Solves" id="problem">
+
+        <p>
+            Building a multi-library Kotlin Multiplatform ecosystem without a shared foundation leads to predictable problems:
+            each library reinvents its own UUID generation, each module defines its own DSL markers with slightly different names,
+            and platform detection ends up scattered across the codebase as fragile string comparisons.
+        </p>
+
+        <p>
+            The result is inconsistency. Two libraries in the same ecosystem behave differently because they each solved the same
+            problem independently. Kore eliminates this class of problem by providing a single, tested, well-defined set of
+            primitives that every DavilsX library depends on.
+        </p>
+
+        <tip>
+            If you are building your own Kotlin Multiplatform library ecosystem, the architecture of Kore — a zero-dependency
+            foundation module that all other modules reference — is a pattern worth adopting from the start.
+        </tip>
+
+    </chapter>
+
+    <chapter title="Design Principles" id="design-principles">
+
+        <p>
+            Every decision in Kore is guided by four principles. They are not aspirational — they are constraints that
+            shape what goes in and what stays out.
+        </p>
+
+        <deflist>
+            <def title="Standardization">
+                Common problems have one canonical solution. UUIDs, platform detection, and value providers exist in one place
+                and are consumed everywhere. There is no room for parallel implementations inside the ecosystem.
+            </def>
+            <def title="Consistency">
+                Shared DSL markers and internal annotations used across all DavilsX libraries come from Kore.
+                A <code>@KoreDsl</code> annotation means the same thing in every library that uses it.
+            </def>
+            <def title="Reliability">
+                Kore ships with tests across all supported targets. Behavior is deterministic and verified on JVM, Android,
+                iOS, macOS, Windows, Linux, Wasm, and JS. There are no platform-specific surprises.
+            </def>
+            <def title="Developer-First">
+                Explicit API mode is enabled. Every public symbol is intentional. Type safety is non-negotiable.
+                If a design requires a magic string, it is the wrong design.
+            </def>
+        </deflist>
+
+    </chapter>
+
+    <chapter title="Place in the Ecosystem" id="ecosystem">
+
+        <p>
+            Kore sits at the root of the DavilsX dependency graph. Every other DavilsX library depends on it directly or
+            transitively. This means Kore carries a significant responsibility: it must never introduce breaking changes
+            without deliberate coordination, and it must stay lean enough that adding it to any project carries negligible overhead.
+        </p>
+
+        <note>
+            Kore is intentionally kept minimal. Features that belong to a specific domain — networking, serialization, UI —
+            are out of scope. If something can live in a more specific module, it should.
+        </note>
+
+        <p>
+            The following diagram shows where Kore fits relative to other libraries in the DavilsX ecosystem:
+        </p>
+
+        <code-block lang="plain"><![CDATA[
+┌─────────────────────────────────────────────┐
+│              DavilsX Libraries              │
+│   (networking, serialization, UI, etc.)     │
+└────────────────────┬────────────────────────┘
+│ depends on
+┌────────────────────▼────────────────────────┐
+│                   Kore                      │
+│   Platform · UUID · Annotations · JVM DSL   │
+└────────────────────┬────────────────────────┘
+│ targets
+┌───────────┼────────────┐
+JVM        iOS/Android   Web/Native
+]]></code-block>
+
+    </chapter>
+
+    <chapter title="Core Components" id="core-components">
+
+        <chapter title="Platform Detection" id="platform-detection">
+            <p>
+                Type-safe detection of the underlying operating system and runtime environment.
+                Instead of checking system property strings at runtime, you work with a sealed type hierarchy
+                that the compiler can reason about exhaustively.
+            </p>
+            <code-block lang="kotlin"><![CDATA[
+val os = Platform.current
+println("Running on: ${os.name}")
+]]></code-block>
+<p>
+Detects Linux, macOS, Windows, Android, iOS, and browser environments.
+No magic strings. No <code>System.getProperty("os.name").lowercase().contains(...)</code>.
+</p>
+</chapter>
+
+        <chapter title="UUID Utilities" id="uuid">
+            <p>
+                Full UUID implementation with native performance on all supported targets.
+                Both UUID v4 (random) and UUID v7 (time-ordered) are available from <code>commonMain</code>,
+                making them usable in shared code without any platform-specific imports.
+            </p>
+            <code-block lang="kotlin"><![CDATA[
+// Random UUID — suitable for most use cases
+val id = Uuid.randomUuidV4()
+
+// Time-ordered UUID — better for database primary keys
+val orderedId = Uuid.randomUuidV7()
+]]></code-block>
+<tip>
+UUID v7 is monotonically increasing, which makes it significantly more efficient as a database primary key
+compared to v4. If you are storing identifiers in a sorted index, prefer v7.
+</tip>
+</chapter>
+
+        <chapter title="Common Annotations" id="annotations">
+            <p>
+                A centralized set of annotations that enforce architectural contracts across the entire DavilsX ecosystem.
+                These annotations are not cosmetic — they integrate directly with Kotlin's compiler opt-in mechanism.
+            </p>
+            <deflist>
+                <def title="@KoreDsl">
+                    Marks a type or function as part of a DSL scope. Prevents accidental access to outer DSL receivers
+                    inside nested builders, a common source of subtle bugs in Kotlin DSL design.
+                </def>
+                <def title="@InternalKoreApi">
+                    Signals that a declaration is internal to the DavilsX ecosystem. Using it in external code requires
+                    an explicit opt-in and communicates that the API may change without notice.
+                </def>
+                <def title="@ExperimentalKoreApi">
+                    Marks an API that is functional but not yet finalized. Opt-in is required and the API may evolve
+                    based on feedback before stabilization.
+                </def>
+            </deflist>
+        </chapter>
+
+        <chapter title="JVM Native Bridge" id="jvm-bridge">
+            <p>
+                Thread-safe management for loading native libraries on the JVM.
+                This component simplifies the integration of C, C++, or Rust code into JVM applications,
+                handling the low-level details of library lifecycle so you do not have to.
+            </p>
+            <warning>
+                The JVM Native Bridge is available exclusively on the JVM target.
+                It is not part of the common API and cannot be used in shared multiplatform code.
+            </warning>
+        </chapter>
+
+        <chapter title="System Properties DSL" id="system-properties">
+            <p>
+                An advanced, type-safe DSL for reading and writing JVM system properties.
+                Instead of interacting with raw string keys, you work with a structured API that provides
+                compile-time safety and IDE completion.
+            </p>
+            <warning>
+                The System Properties DSL is available exclusively on the JVM target.
+                It is not part of the common API and cannot be used in shared multiplatform code.
+            </warning>
+        </chapter>
+
+    </chapter>
+
+    <chapter title="What Kore Is Not" id="out-of-scope">
+
+        <p>
+            Understanding scope is as important as understanding features.
+            Kore is explicitly not a general-purpose utility library.
+        </p>
+
+        <list>
+            <li>It does not provide networking, HTTP clients, or serialization.</li>
+            <li>It does not include UI components or rendering primitives.</li>
+            <li>It does not wrap coroutines or provide concurrency abstractions beyond what the language offers.</li>
+            <li>It does not grow to accommodate features that belong in a more specific DavilsX module.</li>
+        </list>
+
+        <p>
+            If a feature request does not serve every module in the ecosystem equally, it does not belong in Kore.
+        </p>
+
+    </chapter>
+
+</topic>

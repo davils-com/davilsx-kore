@@ -12,15 +12,13 @@
         </description>
 
         <spotlight>
-            <card href="Getting-Started.md" badge="start"
-                  summary="Create beautiful projects with ease. Let's get started!"/>
-            <card href="Changelog.md" badge="search" summary="See what's new in the latest version"/>
-            ...
+            <card href="Getting-Started.topic" badge="start" summary="Create beautiful projects with ease. Let's get started!"/>
         </spotlight>
 
         <secondary>
-            <title>Take a first look</title>
-            <card href="Overview.md" badge="documents" summary="Understand the Kore architecture and their features"/>
+            <title>Take a look</title>
+            <card href="Overview.topic" badge="documents" summary="Understand the Kore architecture and their features"/>
+            <card href="Changelog.md" badge="search" summary="See what's new in the latest version"/>
         </secondary>
 
 
