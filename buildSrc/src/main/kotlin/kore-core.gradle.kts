@@ -37,6 +37,11 @@ kreate {
             explicitApi = true
             allWarningsAsErrors = true
         }
+
+        version {
+            environment = "CI_COMMIT_TAG"
+            property = "version"
+        }
     }
 }
 
