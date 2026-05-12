@@ -28,7 +28,7 @@ import com.davils.kore.pattern.dsl.verification.DslVerificationException
  * and any errors are captured within a [Result] object.
  *
  * @param D The type of [DslVerifiableData] that this validator produces and validates.
- * @since 1.0.0
+ * @since 1.0.1
  */
 public abstract class DslResultValidator<D : DslVerifiableData> : Validator<D>(), DslResult<D> {
     /**
@@ -38,7 +38,7 @@ public abstract class DslResultValidator<D : DslVerifiableData> : Validator<D>()
      * fails or an exception occurs, a failure [Result] is returned.
      *
      * @return A [Result] containing the validated data object of type [D] or an error.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     override fun produce(): Result<D> = try {
         val data = data()
@@ -55,7 +55,7 @@ public abstract class DslResultValidator<D : DslVerifiableData> : Validator<D>()
      *
      * @param data The data object to validate.
      * @return A [Result] indicating success with the data or failure with an exception.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     private fun validateData(data: D): Result<D> {
         val validator = data.validate()

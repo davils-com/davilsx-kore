@@ -26,7 +26,7 @@ import com.davils.kore.pattern.dsl.verification.DslVerifiableData
  * ensuring that components can provide access to the data they are validating.
  *
  * @param T The type of [DslVerifiableData] that this validator handles.
- * @since 1.0.0
+ * @since 1.0.1
  */
 @KoreDsl
 public abstract class Validator<out T : DslVerifiableData> {
@@ -37,7 +37,7 @@ public abstract class Validator<out T : DslVerifiableData> {
      * instance that will be validated.
      *
      * @return The data object of type [T].
-     * @since 1.0.0
+     * @since 1.0.1
      */
     protected abstract fun data(): T
 }

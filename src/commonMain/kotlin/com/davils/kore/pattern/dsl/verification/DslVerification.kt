@@ -22,7 +22,7 @@ package com.davils.kore.pattern.dsl.verification
  * This class allows checking if a DSL configuration is valid and provides
  * access to the list of failures if any occurred.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 public class DslVerification internal constructor(private val data: DslVerificationData) {
     /**
@@ -30,7 +30,7 @@ public class DslVerification internal constructor(private val data: DslVerificat
      *
      * Returns `true` if there are no failures, `false` otherwise.
      *
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public val isValid: Boolean
         get() = data.failures.isEmpty()
@@ -38,7 +38,7 @@ public class DslVerification internal constructor(private val data: DslVerificat
     /**
      * The list of failures encountered during verification.
      *
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public val failures: List<DslVerificationFailure>
         get() = data.failures
@@ -52,7 +52,7 @@ public class DslVerification internal constructor(private val data: DslVerificat
  *
  * @param builder A lambda expression to configure the [DslVerificationBuilder].
  * @return A [DslVerification] instance containing the result of the builder.
- * @since 1.0.0
+ * @since 1.0.1
  */
 public fun verifyDsl(builder: DslVerificationBuilder.() -> Unit): DslVerification {
     val builder = DslVerificationBuilder()

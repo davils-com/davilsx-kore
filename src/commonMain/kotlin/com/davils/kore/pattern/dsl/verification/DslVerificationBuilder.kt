@@ -25,7 +25,7 @@ import com.davils.kore.pattern.dsl.Dsl
  * This class implements the [Dsl] interface and provides various methods to
  * record verification failures, either individually or in groups.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 @KoreDsl
 public class DslVerificationBuilder internal constructor() : Dsl<DslVerificationData> {
@@ -36,7 +36,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      *
      * @param message A descriptive message explaining the failure.
      * @param field The name of the field that failed verification (optional).
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public fun fail(message: String, field: String? = null) {
         failures.add(DslVerificationFailure(message, field))
@@ -46,7 +46,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      * Records a specific [DslVerificationFailure].
      *
      * @param failure The failure object to record.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public fun fail(failure: DslVerificationFailure) {
         failures.add(failure)
@@ -56,7 +56,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      * Records all failures from an [Iterable] collection.
      *
      * @param failures An [Iterable] of failures to record.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public fun failAll(failures: Iterable<DslVerificationFailure>) {
         this.failures.addAll(failures)
@@ -66,7 +66,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      * Records all provided failures.
      *
      * @param failures One or more failure objects to record.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public fun failAll(vararg failures: DslVerificationFailure) {
         this.failures.addAll(failures)
@@ -78,7 +78,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      * This allows adding a failure with the syntax `+DslVerificationFailure(...)`.
      *
      * @receiver The [DslVerificationFailure] to record.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public operator fun DslVerificationFailure.unaryPlus() {
         fail(this)
@@ -88,7 +88,7 @@ public class DslVerificationBuilder internal constructor() : Dsl<DslVerification
      * Produces the [DslVerificationData] containing all recorded failures.
      *
      * @return A [DslVerificationData] instance with the collected failures.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     override fun produce(): DslVerificationData {
         return DslVerificationData(failures)

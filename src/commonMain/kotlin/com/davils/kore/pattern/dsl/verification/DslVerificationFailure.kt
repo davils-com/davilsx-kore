@@ -22,13 +22,13 @@ package com.davils.kore.pattern.dsl.verification
  * Each failure consists of a descriptive message and an optional field name
  * that indicates where the verification error occurred.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 public data class DslVerificationFailure(
     /**
      * A descriptive message explaining the reason for the failure.
      *
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public val message: String,
 
@@ -37,7 +37,7 @@ public data class DslVerificationFailure(
      *
      * This can be `null` if the failure is not specific to a single field.
      *
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public val field: String? = null
 )

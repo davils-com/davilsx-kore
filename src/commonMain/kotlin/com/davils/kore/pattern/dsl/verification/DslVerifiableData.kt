@@ -22,14 +22,14 @@ package com.davils.kore.pattern.dsl.verification
  * Classes implementing this interface must provide a [validate] method that
  * returns a [DslVerification] object containing any validation failures.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 public interface DslVerifiableData {
     /**
      * Validates the data and returns the verification results.
      *
      * @return A [DslVerification] instance containing the validation results.
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public fun validate(): DslVerification
 }

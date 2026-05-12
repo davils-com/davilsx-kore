@@ -22,14 +22,14 @@ package com.davils.kore.pattern.dsl.verification
  * This data class holds a list of [DslVerificationFailure] objects that
  * occurred during the verification process.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 @ConsistentCopyVisibility
 public data class DslVerificationData internal constructor(
     /**
      * The list of failures encountered during verification.
      *
-     * @since 1.0.0
+     * @since 1.0.1
      */
     public val failures: List<DslVerificationFailure>
 )
