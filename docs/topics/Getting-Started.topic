@@ -1,0 +1,200 @@
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Getting Started"
+       id="Getting-Started">
+
+    <primary-label ref="onboard"/>
+
+    <p>
+        This guide explains how to add Kore to your project and verify that the setup works correctly.
+    </p>
+
+    <p>
+        Kore is published on Maven Central and can be used in both JVM-only and Kotlin Multiplatform projects.
+        The setup is intentionally lightweight so it can be added to new and existing Gradle builds with minimal effort.
+    </p>
+
+    <chapter title="Requirements" id="requirements">
+        <p>Before adding Kore, make sure your project meets the following requirements:</p>
+        <list>
+            <li>Gradle with Kotlin DSL.</li>
+            <li>A configured <code>mavenCentral()</code> repository.</li>
+            <li>A Kotlin project set up for either JVM or Kotlin Multiplatform.</li>
+        </list>
+    </chapter>
+
+    <chapter title="Supported Targets" id="supported-targets">
+        <p>Kore supports the full spectrum of Kotlin Multiplatform targets, including desktop, mobile, web, and embedded platforms.</p>
+
+        <warning>
+            Some advanced features may be <b>JVM/Android-only</b> due to platform <b>limitations</b>.
+        </warning>
+
+        <table frame="all">
+            <tr>
+                <th>Platform</th>
+                <th>Targets</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td rowspan="2">JVM</td>
+                <td><code>jvm()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td>Backend, desktop, CLI</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="3">Web</td>
+                <td><code>js(IR) { browser() }</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>wasmJs { browser() }</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td>Browser APIs available</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="4">iOS</td>
+                <td><code>iosX64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>iosArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>iosSimulatorArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td>Device + Simulator</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="2">Android</td>
+                <td><code>android { ... }</code><br/>Min SDK 21+</td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td>Full Java interop</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="3">Desktop</td>
+                <td><code>mingwX64()</code> (Windows)</td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>macosArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>linuxX64()</code>, <code>linuxArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td rowspan="6">Apple TV/Watch</td>
+                <td><code>tvosArm64()</code>, <code>tvosSimulatorArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>watchosArm32()</code>, <code>watchosArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td><code>watchosSimulatorArm64()</code>, <code>watchosDeviceArm64()</code></td>
+                <td><b>✅ Stable</b></td>
+            </tr>
+            <tr>
+                <td>Full Apple ecosystem</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>32/64-bit support</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Device + Simulator</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <p><b>Key capabilities:</b></p>
+        <list>
+            <li>Works across <b>all major Kotlin targets</b> from a single <code>commonMain</code> dependency.</li>
+            <li>Full <b>host testing support</b> including Android resources.</li>
+            <li>Consistent APIs across platforms; platform-specific features where needed.</li>
+        </list>
+    </chapter>
+
+    <chapter title="Installation" id="installation">
+        <p>Choose the setup that matches your project type.</p>
+
+        <tabs>
+            <tab id="kmp-install" title="Kotlin Multiplatform">
+                <p>
+                    Add Kore to the <code>commonMain</code> source set so it is available from shared code.
+                </p>
+                <code-block lang="kotlin">
+                    <![CDATA[kotlin {
+                        sourceSets {
+                            commonMain.dependencies {
+                                implementation("com.davils:davilsx-kore:<latest>")
+                            }
+                        }
+                    }]]>
+                </code-block>
+                <p><b>Details</b></p>
+                <list>
+                    <li>Use <code>commonMain</code> when Kore should be accessible from shared multiplatform code.</li>
+                    <li>Platform source sets such as <code>jvmMain</code>, <code>androidMain</code>, or <code>iosMain</code> can use the shared integration.</li>
+                    <li>Replace <code>&lt;latest&gt;</code> with the currently released version.</li>
+                </list>
+            </tab>
+
+            <tab id="jvm-install" title="JVM">
+                <p>
+                    For JVM-only projects, add Kore directly to the main dependency block.
+                </p>
+                <code-block lang="kotlin">
+                    <![CDATA[dependencies {
+                        implementation("com.davils:davilsx-kore:<latest>")
+                    }]]>
+                </code-block>
+                <p><b>Details</b></p>
+                <list>
+                    <li>This setup is suitable for backend services, CLI applications, desktop apps, and JVM libraries.</li>
+                    <li>No additional multiplatform source set configuration is required.</li>
+                    <li>Replace <code>&lt;latest&gt;</code> with the currently released version.</li>
+                </list>
+            </tab>
+        </tabs>
+    </chapter>
+
+    <chapter title="Repository Configuration" id="repository-configuration">
+        <p>Ensure that Maven Central is included in your repositories configuration.</p>
+        <code-block lang="kotlin">
+            <![CDATA[repositories {
+                mavenCentral()
+            }]]>
+        </code-block>
+        <p>
+            If this repository is missing, Gradle will not be able to resolve the Kore artifact.
+        </p>
+    </chapter>
+
+    <chapter title="Verify Installation" id="verify-installation">
+        <p>
+            After adding the dependency, refresh the Gradle project in your IDE and confirm that imports resolve correctly.
+        </p>
+        <code-block lang="kotlin"><![CDATA[import com.davils.kore.*]]></code-block>
+        <p>
+            If the import is recognized without errors, Kore has been added successfully.
+        </p>
+    </chapter>
+</topic>

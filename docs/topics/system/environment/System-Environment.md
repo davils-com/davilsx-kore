@@ -44,24 +44,23 @@ val config = environment {
 
 Inside an `environment` block (or on the `env` object), you have access to several utility methods:
 
-| Method | Description |
-|--------|-------------|
-| `getValueOrNull(key)` | Returns the value or `null` if not found. |
-| `getValueOrDefault(key, default)` | Returns the value or a provided fallback. |
-| `getValueOrThrow(key)` | Returns the value or throws an exception if missing. |
-| `contains(key)` | Checks if an environment variable is set. |
+| Method                            | Description                                          |
+|-----------------------------------|------------------------------------------------------|
+| `getValueOrNull(key)`             | Returns the value or `null` if not found.            |
+| `getValueOrDefault(key, default)` | Returns the value or a provided fallback.            |
+| `getValueOrThrow(key)`            | Returns the value or throws an exception if missing. |
+| `contains(key)`                   | Checks if an environment variable is set.            |
 
 ## Platform Support
 
 Environment variable support varies by platform. You can check if the current environment supports variable access using `Environment.isSupported`.
 
-| Platform | Support |
-|----------|---------|
-| JVM      | Full support via `System.getenv()`. |
-| Android  | Limited support. |
+| Platform | Support                                 |
+|----------|-----------------------------------------|
+| Android  | Limited support.                        |
 | Native   | Supported on most Unix/Windows targets. |
-| JS       | Not supported (returns `null`). |
-| WASM     | Not supported (returns `null`). |
+| JS       | Not supported (returns `null`).         |
+| WASM     | Not supported (returns `null`).         |
 
 ### Handling Unsupported Platforms
 

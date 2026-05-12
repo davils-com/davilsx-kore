@@ -18,13 +18,14 @@
 <!DOCTYPE labels SYSTEM "https://resources.jetbrains.com/writerside/1.0/labels-list.dtd">
 <labels xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/labels.xsd">
-    <primary-label id="annotation" short-name="A" name="Annotation" color="blue">
+    <primary-label id="onboard" short-name="OB" name="On Boarding" href="https://www.jetbrains.com">
+        Kore OnBoarding
+    </primary-label>
+
+    <primary-label id="annotation" short-name="AN" name="Annotation">
         Kore annotation system
     </primary-label>
 
-    <primary-label id="jetbrains" short-name="JB" name="JetBrains" href="https://www.jetbrains.com" color="red">
-        Go to www.jetbrains.com
-    </primary-label>
 
     <secondary-label id="wip" name="WIP" color="purple">Work in progress</secondary-label>
     <secondary-label id="beta" name="β" color="tangerine">Beta</secondary-label>
