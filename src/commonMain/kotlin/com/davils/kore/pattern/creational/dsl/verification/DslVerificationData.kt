@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl.verification
+package com.davils.kore.pattern.creational.dsl.verification
 
 /**
- * Exception thrown when DSL verification fails.
+ * Represents the raw data container for DSL verification results.
  *
- * This exception encapsulates a list of [DslVerificationFailure] objects and
- * provides a formatted error message detailing each failure.
+ * This data class holds a list of [DslVerificationFailure] objects that
+ * occurred during the verification process.
  *
  * @since 1.0.0
  */
-public class DslVerificationException(
+@ConsistentCopyVisibility
+public data class DslVerificationData internal constructor(
     /**
-     * The list of failures that caused this exception.
+     * The list of failures encountered during verification.
      *
      * @since 1.0.0
      */
     public val failures: List<DslVerificationFailure>
-) : Exception(
-    buildString {
-        appendLine("DSL verification failed with ${failures.size} failures:")
-        failures.forEachIndexed { index, failure ->
-            appendLine("  ${index + 1}. ${failure.field ?: "Unknown field"}: ${failure.message}")
-        }
-    }
 )

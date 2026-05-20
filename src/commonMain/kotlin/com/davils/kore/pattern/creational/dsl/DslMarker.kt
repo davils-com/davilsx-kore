@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl
+package com.davils.kore.pattern.creational.dsl
 
 import com.davils.kore.annotation.KoreDsl
 

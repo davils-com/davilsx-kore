@@ -16,10 +16,11 @@
 
 package com.davils.kore.pattern.dsl.validation
 
-import com.davils.kore.pattern.dsl.verification.DslVerifiableData
-import com.davils.kore.pattern.dsl.verification.DslVerification
-import com.davils.kore.pattern.dsl.verification.DslVerificationException
-import com.davils.kore.pattern.dsl.verification.verifyDsl
+import com.davils.kore.pattern.creational.dsl.validation.DslValidator
+import com.davils.kore.pattern.creational.dsl.verification.DslVerifiableData
+import com.davils.kore.pattern.creational.dsl.verification.DslVerification
+import com.davils.kore.pattern.creational.dsl.verification.DslVerificationException
+import com.davils.kore.pattern.creational.dsl.verification.verifyDsl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldHaveSize
