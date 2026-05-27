@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.event
+package com.davils.kore.pattern.reactive.event
 
+import com.davils.kore.pattern.functional.loan.Disposable
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -44,7 +45,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * @param E The base type of events handled by this bus. Must extend [EventMarker].
  * @since 1.0.1
  */
-public class EventBus<E : EventMarker> internal constructor(private val data: EventBusData) {
+public class EventBus<E : EventMarker> internal constructor(private val data: EventBusData) : Disposable {
     private val isDisposed = atomic(false)
 
     private val sentEvents = MutableSharedFlow<E>(
@@ -253,7 +254,7 @@ public class EventBus<E : EventMarker> internal constructor(private val data: Ev
      *
      * @since 1.0.1
      */
-    public fun dispose() {
+    override fun dispose() {
         if (isDisposed.value) return
         if (isDisposed.compareAndSet(expect = false, update = true)) {
             data.scope.cancel()

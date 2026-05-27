@@ -33,7 +33,7 @@ kreate {
         description = "The core library of the DavilsX ecosystem, providing essential utilities and abstractions for Kotlin Multiplatform projects. "
 
         platform {
-            javaVersion = JavaVersion.VERSION_25
+            javaVersion = JavaVersion.VERSION_17
             explicitApi = true
             allWarningsAsErrors = true
         }

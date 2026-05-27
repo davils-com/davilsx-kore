@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.0
+
+### Added
+- **Resource Management (Loan Pattern)**: Introduced `Disposable` and `DisposableAsync` interfaces to support explicit resource lifecycle management and non-blocking cleanup.
+- **Event Bus Lifecycle**: `EventBus` now implements the `Disposable` interface, ensuring that event bus resources can be properly released.
+- **Project Consistency**: Added `.editorconfig` to enforce unified coding styles and formatting across the codebase.
+
+### Changed
+- **Package Reorganization**: Improved project structure by regrouping modules into more specific categories:
+    - DSL Pattern moved to `com.davils.kore.pattern.creational.dsl`.
+    - Event Pattern moved to `com.davils.kore.pattern.reactive.event`.
+    - System Environment moved to `com.davils.kore.system.environment`.
+- **Java Compatibility**: Downgraded Java and JDK version from 25 to 17 in the build configuration to ensure better stability and compatibility with current tooling.
+- **Dependency Updates**:
+    - Bumped `com.google.devtools.ksp` to 2.3.9.
+    - Bumped Gradle Wrapper from 9.5.0 to 9.5.1.
+
 ## 1.0.1
 
 ### Added
