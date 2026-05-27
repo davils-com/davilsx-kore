@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl.verification
+package com.davils.kore.pattern.creational.dsl.verification
 
 import com.davils.kore.annotation.KoreDsl
-import com.davils.kore.pattern.dsl.Dsl
+import com.davils.kore.pattern.creational.dsl.Dsl
 
 /**
  * A builder class for collecting DSL verification failures.

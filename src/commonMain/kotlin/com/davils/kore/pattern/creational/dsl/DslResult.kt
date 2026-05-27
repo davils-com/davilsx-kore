@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl
+package com.davils.kore.pattern.creational.dsl
 
 import com.davils.kore.annotation.KoreDsl
 
 /**
- * Interface for Domain-Specific Language (DSL) components that produce a result.
+ * Interface for Domain-Specific Language (DSL) components that produce a [Result].
  *
- * This interface extends [DslMarker] and defines the standard contract for DSL
- * builders that can directly instantiate or produce an object of type [T].
+ * This interface extends [DslMarker] and is intended for DSL builders where
+ * the production process might fail or requires validation, returning a [Result]
+ * encapsulating either the successfully produced object or an error.
  *
  * @param T The type of the object produced by this DSL component.
  * @since 1.0.1
  */
 @KoreDsl
-public interface Dsl<out T> : DslMarker<T> {
+public interface DslResult<out T> : DslMarker<T> {
     /**
-     * Produces and returns the object constructed by this DSL component.
+     * Produces and returns the result of the construction process.
      *
-     * @return The constructed object of type [T].
+     * @return A [Result] containing the produced object of type [T] or a failure.
      * @since 1.0.1
      */
-    public fun produce(): T
+    public fun produce(): Result<T>
 }

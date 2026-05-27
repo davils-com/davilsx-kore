@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl.validation
+package com.davils.kore.pattern.creational.dsl.validation
 
 import com.davils.kore.annotation.KoreDsl
-import com.davils.kore.pattern.dsl.verification.DslVerifiableData
+import com.davils.kore.pattern.creational.dsl.verification.DslVerifiableData
 
 /**
  * Base class for DSL components that provide validation for a specific data type.

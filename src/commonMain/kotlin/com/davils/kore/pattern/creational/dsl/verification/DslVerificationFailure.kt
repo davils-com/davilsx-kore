@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davils.kore.pattern.dsl.verification
+package com.davils.kore.pattern.creational.dsl.verification
 
 /**
  * Represents a single failure during DSL verification.
