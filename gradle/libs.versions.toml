@@ -11,7 +11,7 @@ android = "9.1.1"
 # kotlin
 datetime = "0.8.0"
 serialization = "1.11.0"
-atomicfu = "0.32.1"
+atomicfu = "0.33.0"
 coroutines = "1.11.0"
 
 [libraries]
