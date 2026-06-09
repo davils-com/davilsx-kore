@@ -1,7 +1,7 @@
 [versions]
 # plugins
 kotlin = "2.4.0"
-kreate = "1.2.3"
+kreate = "1.2.4"
 kotest = "6.1.11"
 ksp = "2.3.9"
 publish = "0.36.0"
