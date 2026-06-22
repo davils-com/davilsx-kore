@@ -1,17 +1,17 @@
 [versions]
 # plugins
-kotlin = "2.3.21"
-kreate = "1.2.3"
-kotest = "6.1.11"
+kotlin = "2.4.0"
+kreate = "1.2.5"
+kotest = "6.2.1"
 ksp = "2.3.9"
 publish = "0.36.0"
-detekt = "2.0.0-alpha.3"
+detekt = "2.0.0-alpha.5"
 android = "9.1.1"
 
 # kotlin
 datetime = "0.8.0"
 serialization = "1.11.0"
-atomicfu = "0.32.1"
+atomicfu = "0.33.0"
 coroutines = "1.11.0"
 
 [libraries]
