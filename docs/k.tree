@@ -11,6 +11,7 @@
     <toc-element topic="Getting-Started.topic"/>
     <toc-element toc-title="What's new in Kore">
         <toc-element topic="Changelog.md"/>
+        <toc-element topic="v1-1-1.md"/>
         <toc-element topic="v1-1-0.md"/>
         <toc-element topic="v1-0-0.md"/>
     </toc-element>
@@ -27,12 +28,22 @@
         </toc-element>
         <toc-element toc-title="File System"/>
         <toc-element topic="System-Value-Provider.md"/>
-        <toc-element topic="System-Environment.md"/>
+        <toc-element toc-title="Environment">
+            <toc-element topic="System-Environment.md"/>
+            <toc-element topic="System-Application-Mode.md"/>
+            <toc-element topic="System-Program-Arguments.md"/>
+        </toc-element>
         <toc-element topic="System-Properties.md"/>
     </toc-element>
     <toc-element toc-title="Pattern">
-        <toc-element toc-title="DSL"/>
-        <toc-element toc-title="Event"/>
+        <toc-element toc-title="DSL">
+            <toc-element topic="DSL-Pattern.md"/>
+        </toc-element>
+        <toc-element toc-title="Event">
+            <toc-element topic="Event-Bus.md"/>
+        </toc-element>
     </toc-element>
-    <toc-element toc-title="UUID"/>
+    <toc-element toc-title="UUID">
+        <toc-element topic="Uuid-Overview.md"/>
+    </toc-element>
 </instance-profile>

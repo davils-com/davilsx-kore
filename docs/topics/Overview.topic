@@ -91,7 +91,7 @@
 │ depends on
 ┌────────────────────▼────────────────────────┐
 │                   Kore                      │
-│   Platform · UUID · Annotations · JVM DSL   │
+│ Platform · UUID · Event Bus · Annotations   │
 └────────────────────┬────────────────────────┘
 │ targets
 ┌───────────┼────────────┐
@@ -131,11 +131,33 @@ val id = Uuid.randomUuidV4()
 // Time-ordered UUID — better for database primary keys
 val orderedId = Uuid.randomUuidV7()
 ]]></code-block>
-<tip>
-UUID v7 is monotonically increasing, which makes it significantly more efficient as a database primary key
-compared to v4. If you are storing identifiers in a sorted index, prefer v7.
-</tip>
-</chapter>
+            <tip>
+                UUID v7 is monotonically increasing, which makes it significantly more efficient as a database primary key
+                compared to v4. If you are storing identifiers in a sorted index, prefer v7.
+            </tip>
+        </chapter>
+
+        <chapter title="Event Bus" id="event-bus">
+            <p>
+                A multi-topic, Kafka-inspired event bus for decoupled component communication.
+                It enforces a strict topic-based API where every publication and subscription targets a named channel.
+            </p>
+            <code-block lang="kotlin"><![CDATA[
+val bus = eventBus(scope) {
+    topic<UserEvent>("users") {
+        replay = 10
+    }
+}
+
+// Subscribe to a topic
+bus.topic<UserEvent>("users").subscribe { event ->
+    println("Received: $event")
+}
+]]></code-block>
+            <p>
+                Topics are strongly typed and declared upfront, ensuring type safety and preventing runtime errors common in flat event buses.
+            </p>
+        </chapter>
 
         <chapter title="Common Annotations" id="annotations">
             <p>
@@ -147,11 +169,11 @@ compared to v4. If you are storing identifiers in a sorted index, prefer v7.
                     Marks a type or function as part of a DSL scope. Prevents accidental access to outer DSL receivers
                     inside nested builders, a common source of subtle bugs in Kotlin DSL design.
                 </def>
-                <def title="@InternalKoreApi">
+                <def title="@KoreInternal">
                     Signals that a declaration is internal to the DavilsX ecosystem. Using it in external code requires
                     an explicit opt-in and communicates that the API may change without notice.
                 </def>
-                <def title="@ExperimentalKoreApi">
+                <def title="@KoreExperimental">
                     Marks an API that is functional but not yet finalized. Opt-in is required and the API may evolve
                     based on feedback before stabilization.
                 </def>
