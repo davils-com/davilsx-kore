@@ -44,7 +44,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * disposes every topic.
  *
  * @param T The event type carried by this topic. Must extend [EventMarker].
- * @since 1.1.0
+ * @since 1.1.1
  */
 public class EventTopic<T : EventMarker> internal constructor(
     /**
@@ -53,7 +53,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Assigned at construction time and immutable for the lifetime of the topic.
      * Must be unique across all topics of the same bus.
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public val name: String,
     /**
@@ -62,7 +62,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Used to perform safe casts on values flowing through the shared underlying
      * event stream, avoiding unchecked casts on the caller side.
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public val eventType: KClass<T>,
     private val data: EventTopicData
@@ -81,7 +81,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * has been disposed, the call is silently ignored.
      *
      * @param event The event to publish.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun push(event: T) {
         if (isDisposed.value) return
@@ -96,7 +96,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * If the topic has been disposed, the call is silently ignored.
      *
      * @param event The event to publish.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emit(event: T) {
         if (isDisposed.value) return
@@ -108,7 +108,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param event The event to publish.
      * @return `true` if the event was successfully buffered, `false` otherwise.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun tryPush(event: T): Boolean {
         if (isDisposed.value) return false
@@ -121,7 +121,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Each event is emitted within the topic's coroutine scope.
      *
      * @param events The collection of events to publish.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun pushAll(events: Iterable<T>) {
         data.scope.launch {
@@ -133,7 +133,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Publishes multiple events to the topic asynchronously.
      *
      * @param events The events to publish.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun pushAll(vararg events: T) {
         pushAll(events.asIterable())
@@ -143,7 +143,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Publishes multiple events to the topic and suspends until all are delivered.
      *
      * @param events The collection of events to emit.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emitAll(events: Iterable<T>) {
         events.forEach { emit(it) }
@@ -153,7 +153,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * Publishes multiple events to the topic and suspends until all are delivered.
      *
      * @param events The events to emit.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emitAll(vararg events: T) {
         emitAll(events.asIterable())
@@ -164,7 +164,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param events The collection of events to publish.
      * @return `true` if every event was successfully buffered, `false` otherwise.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun tryPushAll(events: Iterable<T>): Boolean = events.all { tryPush(it) }
 
@@ -173,7 +173,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param events The events to publish.
      * @return `true` if every event was successfully buffered, `false` otherwise.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun tryPushAll(vararg events: T): Boolean = tryPushAll(events.asIterable())
 
@@ -185,7 +185,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param event The event to publish.
      * @param predicate The condition that must hold for the event to be published.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun pushIf(event: T, predicate: (T) -> Boolean): Unit =
         if (predicate(event)) push(event) else Unit
@@ -195,7 +195,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param event The event to emit.
      * @param delay The duration to wait before emitting.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emitDelayed(event: T, delay: Duration) {
         delay(delay)
@@ -207,7 +207,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param event The event to emit.
      * @param delayMillisecond The time in milliseconds to wait before emitting.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emitDelayed(event: T, delayMillisecond: Long) {
         emitDelayed(event, delayMillisecond.milliseconds)
@@ -220,7 +220,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      *
      * @param event The event to emit.
      * @param predicate The condition that must hold for the event to be emitted.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public suspend fun emitIf(event: T, predicate: suspend (T) -> Boolean): Unit =
         if (predicate(event)) emit(event) else Unit
@@ -232,7 +232,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * events published to sibling topics.
      *
      * @return A flow of events emitted on this topic.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun events(): SharedFlow<T> = sentEvents.asSharedFlow()
 
@@ -246,7 +246,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * throws. If null, the topic's global error handler is used.
      * @param on The suspending block executed for each received event.
      * @return A [Job] representing the active subscription.
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public fun subscribe(
         onError: (suspend (Throwable) -> Unit)? = null,
@@ -269,7 +269,7 @@ public class EventTopic<T : EventMarker> internal constructor(
      * After disposal, all active subscriptions are cancelled and any further
      * publish attempts are ignored. Repeated calls to [dispose] are no-ops.
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     override fun dispose() {
         if (isDisposed.value) return

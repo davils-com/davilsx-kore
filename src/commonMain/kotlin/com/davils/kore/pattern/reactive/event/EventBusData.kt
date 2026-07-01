@@ -16,60 +16,26 @@
 
 package com.davils.kore.pattern.reactive.event
 
-import com.davils.kore.pattern.creational.dsl.verification.DslVerifiableData
-import com.davils.kore.pattern.creational.dsl.verification.DslVerification
-import com.davils.kore.pattern.creational.dsl.verification.verifyDsl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-
 /**
- * Internal data configuration for the [EventBus].
+ * Immutable data snapshot describing the full configuration of an [EventBus].
  *
- * This class holds the configuration parameters and the coroutine scope
- * used by an [EventBus] instance. It is typically created via [EventBusBuilder].
+ * Produced by [EventBusBuilder.produce] and consumed by the [eventBus] DSL
+ * entry point to construct the actual [EventBus] instance. Keeping the builder
+ * output as a pure data type keeps the DSL free of direct implementation
+ * dependencies and simplifies testing and inspection.
  *
- * @since 1.0.1
+ * @since 1.1.0
  */
 @ConsistentCopyVisibility
 public data class EventBusData internal constructor(
     /**
-     * The [CoroutineScope] in which the event bus operations run.
+     * The immutable map of declared topics keyed by their unique name.
      *
-     * @since 1.0.1
-     */
-    val scope: CoroutineScope,
-
-    /**
-     * The number of events to be replayed to new subscribers.
+     * The map is a defensive snapshot taken at the moment the owning
+     * [EventBusBuilder] produced this data. Iteration order matches the order
+     * in which topics were declared through the DSL.
      *
-     * @since 1.0.1
+     * @since 1.1.1
      */
-    val replay: Int,
-
-    /**
-     * The additional capacity for the event buffer.
-     *
-     * @since 1.0.1
-     */
-    val extraBufferCapacity: Int,
-
-    /**
-     * The strategy to use when the event buffer overflows.
-     *
-     * @since 1.0.1
-     */
-    val overflowStrategy: BufferOverflow,
-
-    /**
-     * The global error handler for event processing exceptions.
-     *
-     * @since 1.0.1
-     */
-    val onError: suspend (Throwable) -> Unit
-) : DslVerifiableData {
-    override fun validate(): DslVerification = verifyDsl {
-        if (replay < 0) fail("Replay must be non-negative", field = "replay")
-        if (extraBufferCapacity < 0) fail("Extra buffer capacity must be non-negative", field = "extraBufferCapacity")
-    }
-}
-
+    val topics: Map<String, EventTopic<*>>
+)

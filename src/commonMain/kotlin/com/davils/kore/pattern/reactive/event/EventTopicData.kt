@@ -30,7 +30,7 @@ import kotlinx.coroutines.channels.BufferOverflow
  * created by the [EventTopicBuilder] and validated before being handed off to
  * the [EventTopic].
  *
- * @since 1.1.0
+ * @since 1.1.1
  */
 @ConsistentCopyVisibility
 public data class EventTopicData internal constructor(
@@ -40,7 +40,7 @@ public data class EventTopicData internal constructor(
      * The scope is expected to be a child of the bus's owning scope so that
      * disposing the bus cancels every topic scope in a single step.
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     val scope: CoroutineScope,
 
@@ -49,7 +49,7 @@ public data class EventTopicData internal constructor(
      *
      * Must be non-negative. Defaults to 0 in [EventTopicBuilder].
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     val replay: Int,
 
@@ -58,7 +58,7 @@ public data class EventTopicData internal constructor(
      *
      * Must be non-negative. Defaults to 64 in [EventTopicBuilder].
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     val extraBufferCapacity: Int,
 
@@ -67,7 +67,7 @@ public data class EventTopicData internal constructor(
      *
      * Defaults to [BufferOverflow.DROP_OLDEST] in [EventTopicBuilder].
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     val overflowStrategy: BufferOverflow,
 
@@ -77,7 +77,7 @@ public data class EventTopicData internal constructor(
      * Invoked when a subscription block throws and does not declare its own
      * error handler.
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     val onError: suspend (Throwable) -> Unit
 ) : DslVerifiableData {

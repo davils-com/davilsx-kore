@@ -32,7 +32,7 @@ import kotlinx.coroutines.plus
  * child scope derived from the bus scope so that failures in one topic never
  * cascade into siblings.
  *
- * @since 1.1.0
+ * @since 1.1.1
  */
 @KoreDsl
 public class EventTopicBuilder internal constructor(
@@ -45,7 +45,7 @@ public class EventTopicBuilder internal constructor(
      * Must be non-negative. Defaults to the value inherited from the enclosing
      * [EventBusBuilder] (globally 0 if not overridden).
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public var replay: Int = defaults.replay
 
@@ -55,7 +55,7 @@ public class EventTopicBuilder internal constructor(
      * Must be non-negative. Defaults to the value inherited from the enclosing
      * [EventBusBuilder] (globally 64 if not overridden).
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public var extraBufferCapacity: Int = defaults.extraBufferCapacity
 
@@ -65,7 +65,7 @@ public class EventTopicBuilder internal constructor(
      * Defaults to the value inherited from the enclosing [EventBusBuilder]
      * (globally [BufferOverflow.DROP_OLDEST] if not overridden).
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public var overflowStrategy: BufferOverflow = defaults.overflowStrategy
 
@@ -76,7 +76,7 @@ public class EventTopicBuilder internal constructor(
      * error handler. Defaults to the handler inherited from the enclosing
      * [EventBusBuilder] (globally a no-op if not overridden).
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     public var onError: suspend (Throwable) -> Unit = defaults.onError
 
