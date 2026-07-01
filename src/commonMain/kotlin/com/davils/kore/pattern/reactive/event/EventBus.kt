@@ -19,261 +19,127 @@ package com.davils.kore.pattern.reactive.event
 import com.davils.kore.pattern.functional.loan.Disposable
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
-import kotlin.reflect.cast
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * A type-safe event bus for publishing and subscribing to events.
+ * A multi-topic, Kafka-inspired event bus.
  *
- * The [EventBus] uses Kotlin Coroutines and [SharedFlow] to manage event distribution.
- * It supports different buffering strategies, replaying events to new subscribers,
- * and asynchronous event processing.
+ * The [EventBus] owns one or more strongly typed [EventTopic] channels. Topics are
+ * declared upfront through the [eventBus] DSL and remain immutable for the
+ * lifetime of the bus. They can be retrieved at any time by name and event
+ * type through [topic], which validates the declared event type at runtime.
  *
- * @param E The base type of events handled by this bus. Must extend [EventMarker].
- * @since 1.0.1
+ * The bus implements [Disposable]. Disposing the bus disposes every topic in
+ * a single atomic step, cancelling all active subscriptions and rejecting
+ * further publications.
+ *
+ * @since 1.1.0
  */
-public class EventBus<E : EventMarker> internal constructor(private val data: EventBusData) : Disposable {
+public class EventBus internal constructor(private val data: EventBusData) : Disposable {
+    private val topics: Map<String, EventTopic<*>> get() = data.topics
     private val isDisposed = atomic(false)
 
-    private val sentEvents = MutableSharedFlow<E>(
-        replay = data.replay,
-        extraBufferCapacity = data.extraBufferCapacity,
-        onBufferOverflow = data.overflowStrategy
-    )
-
     /**
-     * Pushes an event to the bus asynchronously.
+     * Retrieves a strongly typed [EventTopic] handle by name and event type.
      *
-     * The event is emitted within the bus's coroutine scope. If the bus is
-     * disposed, the event is ignored.
+     * The topic is located by [name] and validated against [eventType] at
+     * runtime. If both match the declaration made in the DSL, the handle is
+     * returned with its generic parameter narrowed to [T].
      *
-     * @param event The event to push.
-     * @since 1.0.1
+     * The narrowing relies on an unchecked cast guarded by the runtime
+     * [KClass] equality check; the operation is safe as long as topics are
+     * only ever created through the [eventBus] DSL, which associates each
+     * [EventTopic] instance with its declared [KClass].
+     *
+     * @param T The event type of the topic to retrieve. Must extend [EventMarker].
+     * @param name The unique name of the topic as declared in the DSL.
+     * @param eventType The runtime class of the topic's event type.
+     * @return The [EventTopic] handle associated with [name] and [eventType].
+     * @throws IllegalArgumentException If no topic with the given name is registered,
+     * or if the topic's declared event type does not match [eventType].
+     * @since 1.1.1
      */
-    public fun push(event: E) {
-        if (isDisposed.value) return
-        data.scope.launch {
-            sentEvents.emit(event)
+    @Suppress("UNCHECKED_CAST")
+    public fun <T : EventMarker> topic(name: String, eventType: KClass<T>): EventTopic<T> {
+        val topic = topics[name]
+            ?: throw IllegalArgumentException("Topic '$name' is not registered on this bus")
+        require(topic.eventType == eventType) {
+            "Topic '$name' is declared with event type ${topic.eventType} but was requested as $eventType"
         }
+        return topic as EventTopic<T>
     }
 
     /**
-     * Emits an event to the bus and suspends until it is delivered.
+     * Retrieves a strongly typed [EventTopic] handle using a reified type parameter.
      *
-     * If the bus is disposed, the event is ignored.
+     * Convenience overload of [topic] that infers the [KClass] from the reified
+     * type argument.
      *
-     * @param event The event to emit.
-     * @since 1.0.1
+     * @param T The event type of the topic to retrieve. Must extend [EventMarker].
+     * @param name The unique name of the topic as declared in the DSL.
+     * @return The [EventTopic] handle associated with [name] and the reified type [T].
+     * @throws IllegalArgumentException If no topic with the given name is registered,
+     * or if the topic's declared event type does not match [T].
+     * @since 1.1.1
      */
-    public suspend fun emit(event: E) {
-        if (isDisposed.value) return
-        sentEvents.emit(event)
-    }
+    public inline fun <reified T : EventMarker> topic(name: String): EventTopic<T> = topic(name, T::class)
 
     /**
-     * Attempts to push an event to the bus immediately without suspending.
+     * Returns the names of every topic registered on this bus.
      *
-     * @param event The event to push.
-     * @return `true` if the event was successfully buffered, `false` otherwise.
-     * @since 1.0.1
+     * The returned set is an immutable snapshot and is intended primarily for
+     * diagnostics and logging.
+     *
+     * @return An immutable set containing every declared topic name.
+     * @since 1.1.1
      */
-    public fun tryPush(event: E): Boolean {
-        if (isDisposed.value) {
-            return false
-        }
-
-        return sentEvents.tryEmit(event)
-    }
+    public fun topicNames(): Set<String> = topics.keys.toSet()
 
     /**
-     * Pushes multiple events to the bus asynchronously.
+     * Disposes the bus and every topic it owns.
      *
-     * Each event is emitted within the bus's coroutine scope.
+     * After disposal, every topic scope is cancelled and any further publish
+     * attempts on the contained topics are ignored. Repeated calls to
+     * [dispose] are no-ops.
      *
-     * @param events The collection of events to push.
-     * @since 1.0.1
-     */
-    public fun pushAll(events: Iterable<E>) {
-        data.scope.launch {
-            events.forEach { emit(it) }
-        }
-    }
-
-    /**
-     * Pushes multiple events to the bus asynchronously.
-     *
-     * @param events The events to push.
-     * @since 1.0.1
-     */
-    public fun pushAll(vararg events: E) {
-        pushAll(events.asIterable())
-    }
-
-    /**
-     * Emits multiple events to the bus and suspends until all are delivered.
-     *
-     * @param events The collection of events to emit.
-     * @since 1.0.1
-     */
-    public suspend fun emitAll(events: Iterable<E>) {
-        events.forEach { emit(it) }
-    }
-
-    /**
-     * Emits multiple events to the bus and suspends until all are delivered.
-     *
-     * @param events The events to emit.
-     * @since 1.0.1
-     */
-    public suspend fun emitAll(vararg events: E) {
-        emitAll(events.asIterable())
-    }
-
-    /**
-     * Attempts to push multiple events to the bus immediately.
-     *
-     * @param events The collection of events to push.
-     * @return `true` if all events were successfully buffered, `false` otherwise.
-     * @since 1.0.1
-     */
-    public fun tryPushAll(events: Iterable<E>): Boolean {
-        return events.all { tryPush(it) }
-    }
-
-    /**
-     * Attempts to push multiple events to the bus immediately.
-     *
-     * @param events The events to push.
-     * @return `true` if all events were successfully buffered, `false` otherwise.
-     * @since 1.0.1
-     */
-    public fun tryPushAll(vararg events: E): Boolean {
-        return tryPushAll(events.asIterable())
-    }
-
-    /**
-     * Emits an event after a specified delay.
-     *
-     * @param event The event to emit.
-     * @param delay The duration to wait before emitting.
-     * @since 1.0.1
-     */
-    public suspend fun emitDelayed(
-        event: E,
-        delay: Duration
-    ) {
-        delay(delay)
-        emit(event)
-    }
-
-    /**
-     * Emits an event after a specified delay in milliseconds.
-     *
-     * @param event The event to emit.
-     * @param delayMillisecond The time in milliseconds to wait before emitting.
-     * @since 1.0.1
-     */
-    public suspend fun emitDelayed(
-        event: E,
-        delayMillisecond: Long
-    ) {
-        emitDelayed(event, delayMillisecond.milliseconds)
-    }
-
-    /**
-     * Returns a [SharedFlow] of all events published to this bus.
-     *
-     * @return A flow of events.
-     * @since 1.0.1
-     */
-    public fun events(): SharedFlow<E> = sentEvents.asSharedFlow()
-
-    /**
-     * Subscribes to events of a specific type.
-     *
-     * @param T The type of event to subscribe to.
-     * @param eventType The class of the event type.
-     * @param onError Optional error handler for this subscription. If null, the
-     * bus's global error handler is used.
-     * @param on The block to execute when an event is received.
-     * @return A [Job] representing the subscription. Cancel this job to unsubscribe.
-     * @since 1.0.1
-     */
-    public fun <T : EventMarker> subscribe(
-        eventType: KClass<T>,
-        onError: (suspend (Throwable) -> Unit)? = null,
-        on: suspend (T) -> Unit
-    ): Job {
-        return events()
-            .filter { eventType.isInstance(it) }
-            .map { eventType.cast(it) }
-            .onEach {
-                try {
-                    on(it)
-                } catch (e: Throwable) {
-                    onError?.invoke(e) ?: data.onError(e)
-                }
-            }
-            .launchIn(data.scope)
-    }
-
-    /**
-     * Subscribes to events of a specific type using a reified type parameter.
-     *
-     * @param T The type of event to subscribe to.
-     * @param onError Optional error handler for this subscription. If null, the
-     * bus's global error handler is used.
-     * @param on The block to execute when an event is received.
-     * @return A [Job] representing the subscription. Cancel this job to unsubscribe.
-     * @since 1.0.1
-     */
-    public inline fun <reified T : EventMarker> subscribe(
-        noinline onError: (suspend (Throwable) -> Unit)? = null,
-        noinline on: suspend (T) -> Unit
-    ): Job {
-        return subscribe(T::class, onError, on)
-    }
-
-    /**
-     * Disposes of the event bus and cancels its coroutine scope.
-     *
-     * After disposal, the bus will no longer accept or distribute events.
-     *
-     * @since 1.0.1
+     * @since 1.1.0
      */
     override fun dispose() {
         if (isDisposed.value) return
         if (isDisposed.compareAndSet(expect = false, update = true)) {
-            data.scope.cancel()
+            topics.values.forEach { it.dispose() }
         }
     }
 }
 
 /**
- * Creates and configures a new [EventBus] within the given scope.
+ * Creates and configures a new [EventBus] using a type-safe DSL.
  *
- * @param E The base event type for the bus.
- * @param scope The [CoroutineScope] in which the bus will operate.
- * @param builder A lambda for configuring the bus via [EventBusBuilder].
- * @return A configured [EventBus] instance.
- * @since 1.0.1
+ * The DSL requires the caller to declare at least one topic. Each topic is
+ * independent and receives its own reactive configuration and supervised
+ * child scope. Once produced, the topic set is immutable and topics can be
+ * retrieved either via the [EventTopic] handle returned by the DSL or later via
+ * [EventBus.topic].
+ *
+ * Example:
+ * ```
+ * val bus = eventBus(scope) {
+ *     topic<UserEvent>("users") {
+ *         replay = 10
+ *     }
+ *     topic<OrderEvent>("orders")
+ * }
+ * bus.topic<UserEvent>("users").subscribe { println(it) }
+ * ```
+ *
+ * @param scope The [CoroutineScope] in which every topic's operations run.
+ * @param builder A lambda configuring the bus through [EventBusBuilder].
+ * @return A fully configured [EventBus] with every declared topic ready to use.
+ * @throws IllegalStateException If the DSL block does not declare any topic.
+ * @since 1.1.0
  */
-public fun <E : EventMarker> eventBus(scope: CoroutineScope, builder: EventBusBuilder.() -> Unit = {}): EventBus<E> {
+public fun eventBus(scope: CoroutineScope, builder: EventBusBuilder.() -> Unit): EventBus {
     val eventBusBuilder = EventBusBuilder(scope)
     eventBusBuilder.builder()
-    val data = eventBusBuilder.produce()
-    return EventBus(data)
+    return EventBus(eventBusBuilder.produce())
 }

@@ -192,9 +192,13 @@
         <p>
             After adding the dependency, refresh the Gradle project in your IDE and confirm that imports resolve correctly.
         </p>
-        <code-block lang="kotlin"><![CDATA[import com.davils.kore.*]]></code-block>
+        <code-block lang="kotlin"><![CDATA[import com.davils.kore.uuid.Uuid
+
+fun main() {
+    println(Uuid.randomUuidV4())
+}]]></code-block>
         <p>
-            If the import is recognized without errors, Kore has been added successfully.
+            If the code compiles and the import is recognized without errors, Kore has been added successfully.
         </p>
     </chapter>
 </topic>

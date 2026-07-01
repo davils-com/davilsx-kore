@@ -5,11 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.1
+
+### Added
+- **Event Bus Lifecycle**: `EventBus` and every contained `EventTopic` now implement the `Disposable` interface, ensuring that event bus resources can be properly released.
+- **Topic-Only Event Bus (Kafka-Style, Breaking)**: The event bus is now strictly topic-based; there is no flat, single-stream API anymore. Every publication and every subscription targets a named [EventTopic].
+    - `EventTopic<T>` handle carrying `push`, `emit`, `tryPush`, `pushAll`, `emitAll`, `tryPushAll`, `pushIf`, `emitIf`, `emitDelayed`, `events`, `subscribe`, and `dispose`, plus its declared `eventType` (`KClass<T>`).
+    - `EventBus` container implementing `Disposable`, which disposes every declared topic atomically and exposes type-safe lookup via `bus.topic<T>("name")` guarded by a runtime `KClass` check.
+    - `eventBus { topic<T>("name") { ... } }` DSL that also returns each declared `EventTopic<T>` directly to the caller, requiring at least one topic and offering per-topic replay/buffer/overflow/error configuration.
+    - Bus-wide topic defaults on `EventBusBuilder` (`replay`, `extraBufferCapacity`, `overflowStrategy`, `onError`) that are inherited by every declared topic and can be individually overridden inside each `topic { ... }` DSL block.
+    - `EventBusBuilder.produce()` now returns a pure `EventBusData` snapshot instead of an `EventBus` instance, following the DSL convention that builders emit data only; the `eventBus(...)` DSL entry point wraps that data into the actual `EventBus`.
+- **Command-Line Argument Parsing**: Introduced `ProgramArguments` for thread-safe parsing and access to command-line arguments (supports `--` prefix and key-value pairs).
+- **Application Environments**: Added `ApplicationMode` enum to manage different environments (DEV, STAGE, PROD, etc.) with built-in serialization and validation support.
+
+### Changed
+- **Kotlin Upgrade**: Updated Kotlin to version 2.4.0.
+- **Gradle Upgrade**: Bumped Gradle Wrapper from 9.5.1 to 9.6.1.
+
+### Removed
+- **Removed (Breaking)**: The pre-existing flat `EventBus<E>` and its top-level `eventBus(...)` factory, together with `EventBusData`'s flat configuration and the `pushIf` / `emitIf` operators on the bus itself, have been removed in favor of the topic-based API.
+- **Cleaned Workspace**: Removed unnecessary `yarn.lock` files from Kotlin JS and Wasm directories.
+
 ## 1.1.0
 
 ### Added
 - **Resource Management (Loan Pattern)**: Introduced `Disposable` and `DisposableAsync` interfaces to support explicit resource lifecycle management and non-blocking cleanup.
-- **Event Bus Lifecycle**: `EventBus` now implements the `Disposable` interface, ensuring that event bus resources can be properly released.
 - **Project Consistency**: Added `.editorconfig` to enforce unified coding styles and formatting across the codebase.
 
 ### Changed
