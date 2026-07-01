@@ -50,16 +50,19 @@ public open class ProgramArguments {
      */
     public suspend fun parse(args: Iterable<String>) {
         mutex.withLock {
-            if (isInitialized.compareAndSet(expect = false, update = true)) {
+            if (isInitialized.value) {
                 return
             }
 
             args.forEach { arg ->
-                val parts = arg.split("=", limit = 2)
-                if (parts.size == 2) {
-                    arguments[parts[0]] = parts[1]
+                if (arg.startsWith("--")) {
+                    val parts = arg.split("=", limit = 2)
+                    if (parts.size == 2) {
+                        arguments[parts[0].removePrefix("--")] = parts[1]
+                    }
                 }
             }
+            isInitialized.compareAndSet(expect = false, update = true)
         }
     }
 
@@ -158,7 +161,7 @@ public open class ProgramArguments {
      * @since 1.1.1
      */
     public suspend fun isProductionMode(key: String = "mode"): Boolean {
-        val mode = mode()
+        val mode = mode(key)
         return mode == ApplicationMode.PRODUCTION
     }
 
