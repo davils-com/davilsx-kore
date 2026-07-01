@@ -165,6 +165,18 @@ public class EventBus<E : EventMarker> internal constructor(private val data: Ev
     }
 
     /**
+     * Pushes an event to the bus asynchronously only if the given predicate matches.
+     *
+     * The event is emitted within the bus's coroutine scope. If the condition is not met,
+     * the event is ignored.
+     *
+     * @param event The event to push.
+     * @param predicate The condition that must be met for the event to be pushed.
+     * @since 1.1.0
+     */
+    public fun pushIf(event: E, predicate: (E) -> Boolean): Unit = if (predicate(event)) push(event) else Unit
+
+    /**
      * Emits an event after a specified delay.
      *
      * @param event The event to emit.
@@ -192,6 +204,18 @@ public class EventBus<E : EventMarker> internal constructor(private val data: Ev
     ) {
         emitDelayed(event, delayMillisecond.milliseconds)
     }
+
+    /**
+     * Emits an event to the bus and suspends until it is delivered, only if the given predicate matches.
+     *
+     * If the condition is not met, the event is ignored.
+     *
+     * @param event The event to emit.
+     * @param predicate The condition that must be met for the event to be emitted.
+     * @since 1.1.0
+     */
+    public suspend fun emitIf(event: E, predicate: suspend (E) -> Boolean): Unit =
+        if (predicate(event)) emit(event) else Unit
 
     /**
      * Returns a [SharedFlow] of all events published to this bus.
