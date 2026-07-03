@@ -159,6 +159,50 @@ bus.topic<UserEvent>("users").subscribe { event ->
             </p>
         </chapter>
 
+        <chapter title="Concurrent Collections" id="concurrent-collections">
+            <p>
+                Thread-safe collection implementations designed for Kotlin Multiplatform.
+                The primary implementation is <code>ConcurrentHashMap</code>, which provides atomic operations
+                backed by <code>Mutex</code> for safe use with coroutines.
+            </p>
+            <code-block lang="kotlin"><![CDATA[
+val cache = ConcurrentHashMap<String, User>()
+
+// Atomic update or insert
+cache.compute("user-123") { existing ->
+    existing.map { it.copy(lastSeen = now()) }
+            .or(Option.some(newUser()))
+}
+]]></code-block>
+            <p>
+                Unlike standard collections, all operations are <code>suspend</code> functions,
+                ensuring that thread safety is maintained without blocking threads.
+                For more details, see <a href="Concurrent-HashMap.md"/>.
+            </p>
+        </chapter>
+
+        <chapter title="Functional Patterns" id="functional-patterns">
+            <p>
+                Idiomatic functional primitives inspired by languages like Rust.
+                The <code>Option<T></code> type provides a robust alternative to nullable types,
+                forcing explicit handling of presence or absence.
+            </p>
+            <code-block lang="kotlin"><![CDATA[
+fun findUser(id: String): Option<User> =
+    users.find { it.id == id }.toOption()
+
+findUser("123")
+    .filter { it.isActive }
+    .onSome { println("Found active user: ${it.name}") }
+    .onNone { println("User not found or inactive") }
+]]></code-block>
+            <p>
+                This pattern leads to cleaner, more expressive code and significantly reduces the surface area for
+                <code>NullPointerException</code> or accidental null handling bugs.
+                For more details, see <a href="Option.md"/>.
+            </p>
+        </chapter>
+
         <chapter title="Common Annotations" id="annotations">
             <p>
                 A centralized set of annotations that enforce architectural contracts across the entire DavilsX ecosystem.

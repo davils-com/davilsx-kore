@@ -53,6 +53,18 @@ Type-safe detection of the underlying system to handle platform-specific logic:
 - **Environment Context**: Identify if the code is running in a browser, JVM, or native environment.
 - **Type-Safe API**: No more magic strings for platform checks.
 
+### Concurrent Collections
+Thread-safe, high-performance collections for multiplatform projects:
+- **ConcurrentHashMap**: A `Mutex`-backed concurrent map implementation.
+- **Atomic Operations**: Support for `compute`, `merge`, and other atomic transformations.
+- **Coroutines Ready**: Built from the ground up to work with Kotlin Coroutines.
+
+### Functional Patterns
+Rust-inspired functional primitives for safer and more expressive code:
+- **Option<T>**: A type-safe alternative to nullable types.
+- **Functional Operators**: `map`, `flatMap`, `filter`, `fold`, and more.
+- **Safety First**: Eliminate `NullPointerException` through explicit presence/absence handling.
+
 ### UUID Utilities
 Full implementation of universally unique identifiers:
 - **UUID V4**: Standard random-based identifiers.
@@ -104,6 +116,7 @@ kotlin {
 
 Kore is designed to be used as a library. Most features are available out-of-the-box:
 
+#### Platform & UUID
 ```kotlin
 import com.davils.kore.uuid.Uuid
 import com.davils.kore.system.platform.Platform
@@ -114,6 +127,34 @@ val id = Uuid.randomUuidV7()
 // Detect current platform
 val os = Platform.current
 println("Running on: ${os.name}")
+```
+
+#### Concurrent HashMap
+```kotlin
+import com.davils.kore.collections.ConcurrentHashMap
+import com.davils.kore.pattern.functional.Option
+
+val map = ConcurrentHashMap<String, Int>()
+
+// Atomic compute operation
+map.compute("key") { current ->
+    current.map { it + 1 }.or(Option.some(1))
+}
+
+// Safe access with Option
+val value = map.get("key") // Returns Option<Int>
+```
+
+#### Option Type
+```kotlin
+import com.davils.kore.pattern.functional.Option
+import com.davils.kore.pattern.functional.toOption
+
+val maybeValue = "Hello".toOption()
+val result = maybeValue
+    .filter { it.startsWith("H") }
+    .map { it.uppercase() }
+    .getOrElse { "DEFAULT" }
 ```
 
 ---
