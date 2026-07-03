@@ -16,6 +16,8 @@
 
 package com.davils.kore.collections
 
+import com.davils.kore.pattern.functional.Option
+
 /**
  * A collection that supports concurrent access and modification.
  *
@@ -96,22 +98,22 @@ public interface ConcurrentMutableKVCollection<K, V>: ConcurrentCollection<Map.E
     public suspend fun put(key: K, value: V)
 
     /**
-     * Returns the value associated with the specified key, or null if not found.
+     * Returns the value associated with the specified key, or [Option.None] if not found.
      *
      * @param key The key to look up.
-     * @return The associated value, or null.
+     * @return An [Option] containing the associated value, or [Option.None].
      * @since 1.2.0
      */
-    public suspend fun get(key: K): V?
+    public suspend fun get(key: K): Option<V>
 
     /**
      * Removes the specified key and its associated value from this collection.
      *
      * @param key The key to remove.
-     * @return The value that was associated with the key, or null if not found.
+     * @return An [Option] containing the value that was associated with the key, or [Option.None] if not found.
      * @since 1.2.0
      */
-    public suspend fun remove(key: K): V?
+    public suspend fun remove(key: K): Option<V>
 
     /**
      * Returns true if this collection contains the specified key.
@@ -142,14 +144,14 @@ public interface ConcurrentMutableKVCollection<K, V>: ConcurrentCollection<Map.E
     public suspend fun getOrDefault(key: K, defaultValue: V): V
 
     /**
-     * If the specified key is not already associated with a value, associates it with the given value and returns null, else returns the current value.
+     * If the specified key is not already associated with a value, associates it with the given value and returns [Option.None], else returns the current value.
      *
      * @param key The key with which the specified value is to be associated.
      * @param value The value to be associated with the specified key.
-     * @return The previous value associated with the specified key, or null if there was no mapping for the key.
+     * @return An [Option] containing the previous value associated with the specified key, or [Option.None] if there was no mapping for the key.
      * @since 1.2.0
      */
-    public suspend fun putIfAbsent(key: K, value: V): V?
+    public suspend fun putIfAbsent(key: K, value: V): Option<V>
 
     /**
      * Removes the entry for a key only if currently mapped to a given value.
@@ -177,10 +179,10 @@ public interface ConcurrentMutableKVCollection<K, V>: ConcurrentCollection<Map.E
      *
      * @param key The key with which the specified value is associated.
      * @param value The value to be associated with the specified key.
-     * @return The previous value associated with the specified key, or null if there was no mapping for the key.
+     * @return An [Option] containing the previous value associated with the specified key, or [Option.None] if there was no mapping for the key.
      * @since 1.2.0
      */
-    public suspend fun replace(key: K, value: V): V?
+    public suspend fun replace(key: K, value: V): Option<V>
 
     /**
      * Copies all of the mappings from the specified map to this collection.
@@ -203,42 +205,44 @@ public interface ConcurrentMutableKVCollection<K, V>: ConcurrentCollection<Map.E
     public suspend fun computeIfAbsent(key: K, mappingFunction: suspend (K) -> V): V
 
     /**
-     * If the value for the specified key is present and non-null, attempts to compute a new mapping given the key and its current mapped value.
+     * If the value for the specified key is present, attempts to compute a new mapping given the key and its current mapped value.
      *
      * The entire operation is performed atomically. The [remappingFunction] is invoked while holding a lock on the map.
+     * If the [remappingFunction] returns [Option.None], the mapping is removed.
      *
      * @param key The key with which the specified value is to be associated.
      * @param remappingFunction The function to compute a value.
-     * @return The new value associated with the specified key, or null if none.
+     * @return An [Option] containing the new value associated with the specified key, or [Option.None] if none.
      * @since 1.2.0
      */
-    public suspend fun computeIfPresent(key: K, remappingFunction: suspend (K, V) -> V?): V?
+    public suspend fun computeIfPresent(key: K, remappingFunction: suspend (K, V) -> Option<V>): Option<V>
 
     /**
-     * Attempts to compute a mapping for the specified key and its current mapped value (or null if there is no current mapping).
+     * Attempts to compute a mapping for the specified key and its current mapped value (or [Option.None] if there is no current mapping).
      *
      * The entire operation is performed atomically. The [remappingFunction] is invoked while holding a lock on the map.
+     * If the [remappingFunction] returns [Option.None], the mapping is removed (or remains absent).
      *
      * @param key The key with which the specified value is to be associated.
      * @param remappingFunction The function to compute a value.
-     * @return The new value associated with the specified key, or null if none.
+     * @return An [Option] containing the new value associated with the specified key, or [Option.None] if none.
      * @since 1.2.0
      */
-    public suspend fun compute(key: K, remappingFunction: suspend (K, V?) -> V?): V?
+    public suspend fun compute(key: K, remappingFunction: suspend (K, Option<V>) -> Option<V>): Option<V>
 
     /**
-     * If the specified key is not already associated with a value or is associated with null, associates it with the given non-null value.
-     * Otherwise, replaces the associated value with the results of the given remapping function, or removes if the result is null.
+     * If the specified key is not already associated with a value or is associated with [Option.None], associates it with the given non-null value.
+     * Otherwise, replaces the associated value with the results of the given remapping function, or removes if the result is [Option.None].
      *
      * The entire operation is performed atomically. The [remappingFunction] is invoked while holding a lock on the map.
      *
      * @param key The key with which the resulting value is to be associated.
-     * @param value The non-null value to be merged with the existing value associated with the key or, if no existing value or a null value is associated with the key, to be associated with the key.
+     * @param value The non-null value to be merged with the existing value associated with the key or, if no existing value is associated with the key, to be associated with the key.
      * @param remappingFunction The function to recompute a value if present.
-     * @return The new value associated with the specified key, or null if no value is associated with the key.
+     * @return An [Option] containing the new value associated with the specified key, or [Option.None] if no value is associated with the key.
      * @since 1.2.0
      */
-    public suspend fun merge(key: K, value: V, remappingFunction: suspend (V, V) -> V?): V?
+    public suspend fun merge(key: K, value: V, remappingFunction: suspend (V, V) -> Option<V>): Option<V>
 }
 
 /**
